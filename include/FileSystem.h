@@ -3,7 +3,6 @@
 
 #include "Files.h"
 
-
 class FileSystem {
 private:
 	Directory* rootDirectory;

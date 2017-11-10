@@ -4,7 +4,7 @@
 #include <string>
 #include "FileSystem.h"
 
-
+using namespace std;
 
 class BaseCommand {
 private:
