@@ -2,4 +2,10 @@
 
 #include "../include/Files.h"
 
-FileSystem::FileSystem() {}
+FileSystem::FileSystem() {
+    Directory rootDirectory("", nullptr);
+}
+
+Directory &FileSystem::getRootDirectory() const {
+    return (Directory &) rootDirectory;
+}
