@@ -1,11 +1,14 @@
+#include <iostream>
 #include "../include/FileSystem.h"
 
 #include "../include/Files.h"
 
 FileSystem::FileSystem() {
-    Directory rootDirectory("", nullptr);
+    Directory root("", nullptr);
+    rootDirectory = &root;
+    workingDirectory = &root;
 }
 
 Directory &FileSystem::getRootDirectory() const {
-    return (Directory &) rootDirectory;
+    return *rootDirectory;
 }

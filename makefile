@@ -1,11 +1,8 @@
 all: fs
 
 fs: bin/Commands.o bin/Environment.o bin/Files.o bin/FileSystem.o bin/Main.o
-	@echo 'Building target: fs'
-	@echo 'Invoking: C++ Linker'
 	g++ -o bin/fs bin/Commands.o bin/Environment.o bin/Files.o bin/FileSystem.o bin/Main.o
-	@echo 'Finished building target: fs'
-	@echo ' '
+	@echo 'DONE!!!'
 
 bin/Main.o: src/Main.cpp
 	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Main.o src/Main.cpp
