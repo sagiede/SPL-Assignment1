@@ -35,6 +35,7 @@ private:
 
 public:
 	Directory(string name, Directory *parent); // Constructor
+	~Directory(); // Destructor
 	Directory *getParent() const; // Return a pointer to the parent of this directory
 	void setParent(Directory *newParent); // Change the parent of this directory
 	void addFile(BaseFile* file); // Add the file to children

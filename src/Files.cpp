@@ -14,10 +14,25 @@ string BaseFile::getName() const {
 
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
 
+
+Directory::~Directory() {
+    for (BaseFile *child : children) {
+        delete &child;
+    }
+}
+
 string Directory::getAbsolutePath() {
-    return getName() + "/";
+    return BaseFile::getName() + "/";
 }
 
 int Directory::getSize() {
     return 4; // FIXME
+}
+
+void Directory::addFile(BaseFile *file) {
+    children.push_back(file);
+}
+
+vector<BaseFile *> Directory::getChildren() {
+    return children;
 }
