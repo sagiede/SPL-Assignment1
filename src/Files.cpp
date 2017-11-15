@@ -10,9 +10,10 @@ using namespace std;
 
 //  ~~~~~~~~ BASEFILE ~~~~~~~~~
 BaseFile::BaseFile(string name) : name(name) {}
+
 BaseFile::BaseFile(const BaseFile &aBaseFile) {}
 BaseFile::~BaseFile() {}
-//BaseFile & BaseFile :: operator=(const BaseFile & aBaseFile){}
+BaseFile & BaseFile :: operator=(const BaseFile & aBaseFile){}
 
 string BaseFile::getName() const {
     return name;
@@ -20,10 +21,11 @@ string BaseFile::getName() const {
 
 string BaseFile::typeToString() {}
 
+void BaseFile::setName(string newName) {
+    name = newName;
+}
 // File
 File::File(string name, int size) : BaseFile(name), size(size) {}
-
-File::~File() {}
 
 int File::getSize() {
     return size;
@@ -33,45 +35,52 @@ string File::typeToString() {
     return "FILE";
 }
 
+BaseFile *File::clone() {
+    File *file = new File(getName(), size);
+    return file;
+}
+
 //  ~~~~~~~~ DIRECTORY  ~~~~~~~~
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
 
 Directory::~Directory() {
     for (BaseFile *child : children) {
+        cout << "deleting" << child->getName() << ">";
         delete child;
     }
 }
 
-Directory:: Directory(const Directory &aDirectory)  : BaseFile (aDirectory) {   //copy constructor
+Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory) {   //copy constructor
 
-    for (BaseFile* child : aDirectory.children) {
+    for (BaseFile *child : aDirectory.children) {
         children.push_back(child->clone());
     }
 }
 
-BaseFile* Directory::clone() {                                  //private func
-    Directory* dir = new Directory(getName(),parent);
-    for (BaseFile* child : children) {
+BaseFile *Directory::clone() {                                  //private func
+    Directory *dir = new Directory(getName(), parent);
+    for (BaseFile *child : children) {
         dir->children.push_back(child->clone());
     }
     return dir;
 }
 
-/*Directory & Directory :: operator=(const Directory & aDirectory)    //assignment = operator
-    {
-    if(this != &aDirectory){
+Directory & Directory::operator=(const Directory &aDirectory)    //assignment = operator
+{
+    if (this != &aDirectory) {
         setName(aDirectory.getName());
         parent = aDirectory.parent;
-        for (BaseFile* child : children) {
+        for (BaseFile *child : children) {
             delete child;
         }
-        for (BaseFile* child : aDirectory.children) {
+        for (BaseFile *child : aDirectory.children) {
             children.push_back(child->clone());
         }
         return *this;
     }
 }
-*/
+
+
 string Directory::getAbsolutePath() {
     string fullPath = getName() + "/";
     Directory *curr = getParent();
@@ -114,3 +123,4 @@ vector<BaseFile *> Directory::getChildren() {
 Directory *Directory::getParent() const {
     return parent;
 }
+
