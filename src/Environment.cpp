@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Environment::Environment() : commandsHistory(), fs() {};
+Environment::Environment() {};
 
 void Environment::start() {
     string userInput;

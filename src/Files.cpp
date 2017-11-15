@@ -12,12 +12,11 @@ string BaseFile::getName() const {
     return name;
 }
 
-Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
-
+Directory::Directory(string name, Directory* parent) : BaseFile(name), parent(parent) {}
 
 Directory::~Directory() {
-    for (BaseFile *child : children) {
-        delete &child;
+    for (BaseFile* child : children) {
+        delete *child;
     }
 }
 

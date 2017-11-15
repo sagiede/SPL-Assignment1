@@ -2,7 +2,6 @@
 
 #include <string>
 #include <iostream>
-#include "../include/FileSystem.h"
 
 using namespace std;
 
@@ -19,7 +18,7 @@ PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 
 string PwdCommand::toString() { return BaseCommand::toString(); };
 
-void PwdCommand::execute(FileSystem &fs) {
+void PwdCommand::execute(FileSystem& fs) {
     cout << fs.getRootDirectory().getAbsolutePath() << endl;
 }
 
@@ -38,7 +37,7 @@ LsCommand::LsCommand(string args) : BaseCommand(args) {};
 
 string LsCommand::toString() { return BaseCommand::toString(); };
 
-void LsCommand::execute(FileSystem &fs) {
+void LsCommand::execute(FileSystem& fs) {
     for(BaseFile *child : fs.getWorkingDirectory().getChildren()) {
         cout << child->getName() << endl;
     }
