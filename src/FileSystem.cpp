@@ -2,7 +2,7 @@
 #include "../include/FileSystem.h"
 
 FileSystem::FileSystem() {
-    Directory* root = new Directory("", nullptr);
+    Directory *root = new Directory("", nullptr);
     rootDirectory = root;
     workingDirectory = root;
 }
@@ -17,4 +17,8 @@ Directory &FileSystem::getRootDirectory() const {
 
 Directory &FileSystem::getWorkingDirectory() const {
     return *workingDirectory;
+}
+
+void FileSystem::setWorkingDirectory(Directory *newWorkingDirectory) {
+    workingDirectory = newWorkingDirectory;
 }

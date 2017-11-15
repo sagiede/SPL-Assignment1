@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include <iostream>
 
 using namespace std;
 
@@ -17,11 +18,26 @@ string BaseFile::getName() const {
     return name;
 }
 
-//  ~~~~~~~~ DIRECTORY  ~~~~~~~~
-Directory::Directory(string name, Directory* parent) : BaseFile(name), parent(parent) {}
+string BaseFile::typeToString() {}
 
-Directory::~Directory() {                   //destructor
-    for (BaseFile* child : children) {
+// File
+File::File(string name, int size) : BaseFile(name), size(size) {}
+
+File::~File() {}
+
+int File::getSize() {
+    return size;
+}
+
+string File::typeToString() {
+    return "FILE";
+}
+
+//  ~~~~~~~~ DIRECTORY  ~~~~~~~~
+Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
+
+Directory::~Directory() {
+    for (BaseFile *child : children) {
         delete child;
     }
 }
@@ -57,11 +73,34 @@ BaseFile* Directory::clone() {                                  //private func
 }
 */
 string Directory::getAbsolutePath() {
-    return BaseFile::getName() + "/";
+    string fullPath = getName() + "/";
+    Directory *curr = getParent();
+    while (curr != nullptr) {
+        fullPath = curr->getName() + "/" + fullPath;
+        curr = curr->getParent();
+    }
+    return fullPath;
 }
 
+string Directory::typeToString() {
+    return "DIR";
+}
+
+Directory *Directory::findDirByName(string name) {
+    for (BaseFile *child : getChildren()) {
+        if (child->getName() == name && child->typeToString() == "DIR") {
+            return (Directory *) child;
+        }
+    }
+    return nullptr;
+};
+
 int Directory::getSize() {
-    return 4; // FIXME
+    int size = 0;
+    for (BaseFile *child : children) {
+        size += child->getSize();
+    }
+    return size;
 }
 
 void Directory::addFile(BaseFile *file) {
@@ -70,4 +109,8 @@ void Directory::addFile(BaseFile *file) {
 
 vector<BaseFile *> Directory::getChildren() {
     return children;
+}
+
+Directory *Directory::getParent() const {
+    return parent;
 }

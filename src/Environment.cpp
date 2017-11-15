@@ -12,6 +12,7 @@ void Environment::start() {
     size_t spacePos;
 
     while (commandStr != "exit") {
+        cout << fs.getWorkingDirectory().getAbsolutePath() << ">";
         getline(cin, userInput);
         spacePos = userInput.find(' ');
         if (spacePos == string::npos) {
@@ -19,25 +20,24 @@ void Environment::start() {
             args = "";
         } else {
             commandStr = userInput.substr(0, spacePos);
-            args = userInput.substr(spacePos + 1, userInput.length() - spacePos - 1);
+            args = userInput.substr(spacePos + 1);
         }
-        cout << "commandStr: '" << commandStr << "'" << endl;
-        cout << "args: '" << args << "'" << endl;
 
         if (commandStr == "pwd") {
-            cout << "running pwd" << endl;
-            PwdCommand command("");
+            PwdCommand command(args);
+            command.execute(fs);
+        } else if (commandStr == "cd") {
+            CdCommand command(args);
             command.execute(fs);
         } else if (commandStr == "mkdir") {
-            cout << "running mkdir" << endl;
             MkdirCommand command(args);
             command.execute(fs);
+        }  else if (commandStr == "mkfile") {
+            MkfileCommand command(args);
+            command.execute(fs);
         } else if (commandStr == "ls") {
-            cout << "running ls" << endl;
             LsCommand command(args);
             command.execute(fs);
-        } else {
-            cout << "nothing is running" << endl;
         }
     }
     // TODO start

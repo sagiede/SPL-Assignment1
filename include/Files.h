@@ -8,57 +8,62 @@ using namespace std;
 
 class BaseFile {
 private:
-	string name;
-	
+    string name;
+
 public:
-	BaseFile(string name);
-	~BaseFile(); // Destructor
-	BaseFile(const BaseFile &aBaseFile);  //copy constructor
+    BaseFile(string name);
+    ~BaseFile(); // Destructor
+    BaseFile(const BaseFile &aBaseFile);  //copy constructor
 //	BaseFile & BaseFile :: operator=(const BaseFile & aBaseFile);	//assignment = operator
-	virtual string getName() const;
-	void setName(string newName);
-	virtual int getSize() = 0;
-	virtual BaseFile* clone() = 0;
-	
+    virtual string getName() const;
+    void setName(string newName);
+    virtual int getSize() = 0;
+    virtual BaseFile* clone() = 0;
+    virtual string typeToString();
+
 };
 
 class File : public BaseFile {
 private:
-	int size;
-		
+    int size;
+
 public:
-	File(string name, int size); // Constructor
-	~File(); // Destructor
-	File(const File &File);  //copy constructor
+    File(string name, int size); // Constructor
+    ~File(); // Destructor
+    File(const File &File);  //copy constructor
 //	File & File :: operator=(const BaseFile & aBaseFile);	//assignment = operator
-	BaseFile* clone();	//clone
-	int getSize(); // Return the size of the file
+    BaseFile* clone();	//clone
+    int getSize(); // Return the size of the file
+    string typeToString();
+
 };
 
 class Directory : public BaseFile {
 private:
-	vector<BaseFile*> children;
-	Directory *parent;
+    vector<BaseFile*> children;
+    Directory *parent;
 
 
 public:
-	Directory(string name, Directory *parent); // Constructor
-	~Directory(); // Destructor
-	Directory(const Directory &aDirectory);  //copy constructor
+    Directory(string name, Directory *parent); // Constructor
+    ~Directory(); // Destructor
+    Directory(const Directory &aDirectory);  //copy constructor
 //	Directory & Directory :: operator=(const Directory & aDirectory);	//assignment = operator
-	virtual BaseFile* clone();	//clone
+    virtual BaseFile* clone();	//clone
 
-	Directory *getParent() const; // Return a pointer to the parent of this directory
-	void setParent(Directory *newParent); // Change the parent of this directory
-	void addFile(BaseFile* file); // Add the file to children
-	void removeFile(string name); // Remove the file with the specified name from children
-	void removeFile(BaseFile* file); // Remove the file from children
-	void sortByName(); // Sort children by name alphabetically (not recursively)
-	void sortBySize(); // Sort children by size (not recursively)
-	vector<BaseFile*> getChildren(); // Return children
-	int getSize(); // Return the size of the directory (recursively)
-	string getAbsolutePath();  //Return the path from the root to this
-	
+    Directory *getParent() const; // Return a pointer to the parent of this directory
+    void setParent(Directory *newParent); // Change the parent of this directory
+    void addFile(BaseFile* file); // Add the file to children
+    void removeFile(string name); // Remove the file with the specified name from children
+    void removeFile(BaseFile* file); // Remove the file from children
+    void sortByName(); // Sort children by name alphabetically (not recursively)
+    void sortBySize(); // Sort children by size (not recursively)
+    vector<BaseFile*> getChildren(); // Return children
+    int getSize(); // Return the size of the directory (recursively)
+    string getAbsolutePath();  //Return the path from the root to this
+    Directory* findDirByName(string name);
+    string typeToString();
+
 };
 
 #endif
