@@ -12,10 +12,12 @@ private:
 	
 public:
 	BaseFile(string name);
+	virtual ~BaseFile();
 	string getName() const;
 	void setName(string newName);
 	virtual int getSize() = 0;
-	
+	virtual string typeToString();
+
 };
 
 class File : public BaseFile {
@@ -24,8 +26,10 @@ private:
 		
 public:
 	File(string name, int size); // Constructor
+    ~File(); // Destructor
 	int getSize(); // Return the size of the file
-	
+    string typeToString();
+
 };
 
 class Directory : public BaseFile {
@@ -46,6 +50,8 @@ public:
 	vector<BaseFile*> getChildren(); // Return children
 	int getSize(); // Return the size of the directory (recursively)
 	string getAbsolutePath();  //Return the path from the root to this
+    Directory* findDirByName(string name);
+    string typeToString();
 	
 };
 
