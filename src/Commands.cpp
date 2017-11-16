@@ -126,6 +126,13 @@ void ExecCommand::execute(FileSystem &fs) {
 }
 string ExecCommand::toString() { return "exec"; }
 
+//Error
+ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
+
+void ErrorCommand::execute(FileSystem &fs) {
+        cout << getArgs() <<": Unknown command" << endl;
+}
+string ErrorCommand::toString() { return getArgs(); }
 
 
 

@@ -45,12 +45,18 @@ BaseFile *File::clone() {
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
 
 Directory::~Directory() {
+    clear();
+}
+
+void Directory::clear() {
+    parent = nullptr;
     for (BaseFile *child : children) {
         delete child;
     }
 }
 
-Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory) {   //copy constructor
+
+Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()), parent(aDirectory.parent) {   //copy constructor
 
     for (BaseFile *child : aDirectory.children) {
         children.push_back(child->clone());
@@ -68,11 +74,9 @@ BaseFile *Directory::clone() {                                  //private func
 Directory & Directory::operator=(const Directory &aDirectory)    //assignment = operator
 {
     if (this != &aDirectory) {
+        clear();
         setName(aDirectory.getName());
         parent = aDirectory.parent;
-        for (BaseFile *child : children) {
-            delete child;
-        }
         for (BaseFile *child : aDirectory.children) {
             children.push_back(child->clone());
         }

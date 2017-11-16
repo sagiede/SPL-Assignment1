@@ -13,7 +13,7 @@ private:
 public:
     BaseFile(string name);
 
-   virtual ~BaseFile(); // Destructor
+    virtual ~BaseFile(); // Destructor
     BaseFile(const BaseFile &aBaseFile);  //copy constructor
     BaseFile& operator=(const BaseFile &aBaseFile);    //assignment = operator
     string getName() const;
@@ -47,6 +47,8 @@ class Directory : public BaseFile {
 private:
     vector<BaseFile *> children;
     Directory *parent;
+    void clear();   //delete directory
+    virtual BaseFile *clone();    //clone
 
 
 public:
@@ -54,7 +56,7 @@ public:
     ~Directory(); // Destructor
     Directory(const Directory &aDirectory);  //copy constructor
     Directory& operator=(const Directory &aDirectory);    //assignment = operator
-    virtual BaseFile *clone();    //clone
+
 
     Directory *getParent() const; // Return a pointer to the parent of this directory
     void setParent(Directory *newParent); // Change the parent of this directory
