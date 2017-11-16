@@ -1,4 +1,5 @@
 #include "../include/Environment.h"
+#include "../include/GlobalVariables.h"
 #include <iostream>
 
 using namespace std;
@@ -21,6 +22,10 @@ void Environment::start() {
         } else {
             commandStr = userInput.substr(0, spacePos);
             args = userInput.substr(spacePos + 1);
+        }
+
+        if (verbose == 2 || verbose == 3) {
+            cout << userInput << endl;
         }
 
         if (commandStr == "pwd") {
@@ -51,6 +56,10 @@ void Environment::start() {
             RmCommand *command = new RmCommand(args);
             command->execute(fs);
             addToHistory(command);
+        } else if (commandStr == "verbose") {
+            VerboseCommand *command = new VerboseCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "history") {
             HistoryCommand *command = new HistoryCommand(args, getHistory());
             command->execute(fs);
@@ -65,7 +74,6 @@ void Environment::start() {
             addToHistory(command);
         }
     }
-    // TODO start
 }
 
 FileSystem &Environment::getFileSystem() {

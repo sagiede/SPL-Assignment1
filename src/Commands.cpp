@@ -1,4 +1,5 @@
 #include "../include/Commands.h"
+#include "../include/GlobalVariables.h"
 
 #include <string>
 #include <iostream>
@@ -238,12 +239,30 @@ void RmCommand::execute(FileSystem &fs) {
     }
 }
 
-//History
+// verbose
+VerboseCommand::VerboseCommand(string args) : BaseCommand(args) {};
+
+void VerboseCommand::execute(FileSystem &fs) {
+    verbose = stoul(getArgs());
+}
+
+string VerboseCommand::toString() { return "verbose"; }
+
+//Error
+ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
+
+void ErrorCommand::execute(FileSystem &fs) {
+    cout << getArgs() << ": Unknown command" << endl;
+}
+
+string ErrorCommand::toString() { return getArgs(); }
+
+
+// history
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}
 
 void HistoryCommand::execute(FileSystem &fs) {
-
     for (int i = 0; i < history.size(); i++) {
         cout << i << "\t" << history.at(i)->toString() << endl;
     }
@@ -251,7 +270,7 @@ void HistoryCommand::execute(FileSystem &fs) {
 
 string HistoryCommand::toString() { return "history"; }
 
-//Exec
+// exec
 ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}
 
@@ -264,13 +283,3 @@ void ExecCommand::execute(FileSystem &fs) {
 }
 
 string ExecCommand::toString() { return "exec"; }
-
-//Error
-ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
-
-void ErrorCommand::execute(FileSystem &fs) {
-    cout << getArgs() << ": Unknown command" << endl;
-}
-
-string ErrorCommand::toString() { return getArgs(); }
-
