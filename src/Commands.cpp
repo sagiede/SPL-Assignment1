@@ -38,6 +38,8 @@ Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotF
 
         if (dirName == "..") {
             childDir = curr->getParent();
+        } else if (dirName == ".") {
+            childDir = curr;
         } else {
             childDir = curr->findDirByName(dirName);
             if (childDir == nullptr && createIfNotFound) {
