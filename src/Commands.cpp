@@ -169,6 +169,39 @@ void LsCommand::execute(FileSystem &fs) {
     }
 }
 
+// rename
+RenameCommand::RenameCommand(string args) : BaseCommand(args) {};
+
+string RenameCommand::toString() { return "ls"; };
+
+void RenameCommand::execute(FileSystem &fs) {
+    size_t spacePos = getArgs().find(' ');
+    string filePath = getArgs().substr(0, spacePos);
+    string newName = getArgs().substr(spacePos + 1, getArgs().length() - spacePos - 1);
+
+    Directory *curr;
+    string fileName;
+    size_t lastSlashPos = filePath.find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        fileName = filePath;
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        fileName = filePath.substr(1);
+    } else {
+        string path = filePath.substr(0, lastSlashPos);
+        fileName = filePath.substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, false);
+    }
+    if (curr == nullptr || curr->findFileByName(fileName) == nullptr) {
+        cout << "No such file or directory”" << endl;
+    } else if (curr == &fs.getWorkingDirectory()) {
+        cout << "Can’t rename the working directory" << endl;
+    } else {
+        curr->findFileByName(fileName)->setName(newName);
+    }
+}
+
 //History
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}

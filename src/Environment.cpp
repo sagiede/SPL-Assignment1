@@ -24,40 +24,39 @@ void Environment::start() {
         }
 
         if (commandStr == "pwd") {
-            PwdCommand* command = new PwdCommand(args);
+            PwdCommand *command = new PwdCommand(args);
             command->execute(fs);
             addToHistory(command);
         } else if (commandStr == "cd") {
-            CdCommand* command = new CdCommand(args);
+            CdCommand *command = new CdCommand(args);
             command->execute(fs);
             addToHistory(command);
         } else if (commandStr == "mkdir") {
-            MkdirCommand* command = new MkdirCommand(args);
+            MkdirCommand *command = new MkdirCommand(args);
             command->execute(fs);
             addToHistory(command);
         } else if (commandStr == "mkfile") {
-            MkfileCommand* command = new MkfileCommand(args);
+            MkfileCommand *command = new MkfileCommand(args);
             command->execute(fs);
             addToHistory(command);
         } else if (commandStr == "ls") {
-            LsCommand* command = new LsCommand(args);
+            LsCommand *command = new LsCommand(args);
             command->execute(fs);
             addToHistory(command);
-        }
-          else if (commandStr == "history") {
-        HistoryCommand* command = new HistoryCommand(args,getHistory());
-        command->execute(fs);
-        addToHistory(command);
-        }
-        else if (commandStr == "exec") {
-            ExecCommand* command = new ExecCommand(args,getHistory());
+        } else if (commandStr == "rename") {
+            RenameCommand *command = new RenameCommand(args);
             command->execute(fs);
             addToHistory(command);
-        }
-        else{
-            ErrorCommand* command = new ErrorCommand(commandStr);
+        } else if (commandStr == "history") {
+            HistoryCommand *command = new HistoryCommand(args, getHistory());
             command->execute(fs);
             addToHistory(command);
+        } else if (commandStr == "exec") {
+            ExecCommand *command = new ExecCommand(args, getHistory());
+            command->execute(fs);
+            addToHistory(command);
+        } else {
+            ErrorCommand *command = new ErrorCommand(commandStr);
         }
     }
     // TODO start
