@@ -30,20 +30,18 @@ string CdCommand::toString() { return "cd"; };
 void CdCommand::execute(FileSystem &fs) {
     string path = getArgs();
     Directory *curr;
-    size_t spacePos = path.find('/');
-    if (spacePos == 0) {
+    size_t slashPos = path.find('/');
+    if (slashPos == 0) {
         curr = &fs.getRootDirectory();
         path = path.substr(1);
-        spacePos = path.find('/');
+        slashPos = path.find('/');
     } else {
         curr = &fs.getWorkingDirectory();
     }
-    string dirName = path.substr(0, spacePos);
+    string dirName = path.substr(0, slashPos);
     while (!dirName.empty()) {
-        if (spacePos == string::npos) { // TODO check tailing /
+        if (slashPos == string::npos) { // TODO check tailing /
             path = "";
-        } else {
-            path = path.substr(spacePos + 1);
         }
         if (dirName == "..") {
             curr = curr->getParent();
@@ -51,12 +49,16 @@ void CdCommand::execute(FileSystem &fs) {
             curr = curr->findDirByName(dirName);
         }
 
-        spacePos = path.find('/');
-        dirName = path.substr(0, spacePos);
-        path = path.substr(spacePos + 1);
+        slashPos = path.find('/');
+        dirName = path.substr(0, slashPos);
+        path = path.substr(slashPos + 1);
     }
 
-    fs.setWorkingDirectory(curr);
+    if (curr == nullptr) {
+        cout << "The system cannot find the path specified" << endl;
+    } else {
+        fs.setWorkingDirectory(curr);
+    }
 }
 
 // mkdir
