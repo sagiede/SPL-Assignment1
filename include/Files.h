@@ -13,7 +13,7 @@ private:
 public:
     BaseFile(string name);
 
-    ~BaseFile(); // Destructor
+   virtual ~BaseFile(); // Destructor
     BaseFile(const BaseFile &aBaseFile);  //copy constructor
     BaseFile& operator=(const BaseFile &aBaseFile);    //assignment = operator
     string getName() const;
@@ -34,9 +34,9 @@ private:
 
 public:
     File(string name, int size); // Constructor
-//    ~File(); // Destructor
-//    File(const File &File);  //copy constructor
-//    File& operator=(const BaseFile &aBaseFile);    //assignment = operator
+    ~File(); // Destructor
+    File(const File &File);  //copy constructor
+    File& operator=(const BaseFile &aBaseFile);    //assignment = operator
     BaseFile *clone();    //clone
     int getSize(); // Return the size of the file
     string typeToString();

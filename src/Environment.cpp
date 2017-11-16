@@ -32,7 +32,7 @@ void Environment::start() {
         } else if (commandStr == "mkdir") {
             MkdirCommand command(args);
             command.execute(fs);
-        }  else if (commandStr == "mkfile") {
+        } else if (commandStr == "mkfile") {
             MkfileCommand command(args);
             command.execute(fs);
         } else if (commandStr == "ls") {
@@ -47,10 +47,11 @@ FileSystem &Environment::getFileSystem() {
     return fs;
 }
 
-void Environment::addToHistory(BaseCommand *command) {
+/*void Environment::addToHistory(BaseCommand *command) {
     commandsHistory.push_back(command);
 }
 
 const vector<BaseCommand *> &Environment::getHistory() const {
     return commandsHistory;
-}
+}*/
+

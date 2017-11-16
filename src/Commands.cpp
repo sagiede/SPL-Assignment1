@@ -19,7 +19,7 @@ PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 string PwdCommand::toString() { return BaseCommand::toString(); };
 
 void PwdCommand::execute(FileSystem &fs) {
-    cout << fs.getRootDirectory().getAbsolutePath() << endl;
+    cout << fs.getWorkingDirectory().getAbsolutePath() << endl;
 }
 
 // cd

@@ -10,7 +10,6 @@ using namespace std;
 
 //  ~~~~~~~~ BASEFILE ~~~~~~~~~
 BaseFile::BaseFile(string name) : name(name) {}
-
 BaseFile::BaseFile(const BaseFile &aBaseFile) {}
 BaseFile::~BaseFile() {}
 BaseFile & BaseFile :: operator=(const BaseFile & aBaseFile){}
@@ -26,6 +25,7 @@ void BaseFile::setName(string newName) {
 }
 // File
 File::File(string name, int size) : BaseFile(name), size(size) {}
+File::~File(){};
 
 int File::getSize() {
     return size;
@@ -40,12 +40,12 @@ BaseFile *File::clone() {
     return file;
 }
 
+
 //  ~~~~~~~~ DIRECTORY  ~~~~~~~~
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
 
 Directory::~Directory() {
     for (BaseFile *child : children) {
-        cout << "deleting" << child->getName() << ">";
         delete child;
     }
 }

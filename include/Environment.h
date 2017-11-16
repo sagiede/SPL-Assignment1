@@ -12,7 +12,7 @@ using namespace std;
 
 class Environment {
 private:
-    vector<BaseCommand *> commandsHistory;
+  //  vector<BaseCommand *> commandsHistory;
     FileSystem fs;
 
 public:
