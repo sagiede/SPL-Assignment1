@@ -113,7 +113,18 @@ void HistoryCommand::execute(FileSystem &fs) {
 }
 string HistoryCommand::toString() { return "history"; }
 
+//Exec
+ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &refHistory)
+        : BaseCommand(args) , history(refHistory) {}
 
+void ExecCommand::execute(FileSystem &fs) {
+    int index = std::stoi(getArgs());
+    if(index >= history.size())
+        cout << "Command not found" << endl;
+    else
+    history.at(index)->execute(fs);
+}
+string ExecCommand::toString() { return "exec"; }
 
 
 
