@@ -68,6 +68,7 @@ public:
     vector<BaseFile *> getChildren(); // Return children
     int getSize(); // Return the size of the directory (recursively)
     string getAbsolutePath();  //Return the path from the root to this
+    BaseFile *findFileByName(string name);
     Directory *findDirByName(string name);
 
     string typeToString();

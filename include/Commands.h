@@ -18,6 +18,8 @@ public:
     virtual void execute(FileSystem &fs) = 0;
 
     virtual string toString() = 0;
+
+    Directory *getToPath(FileSystem &fs, string path, bool createIfNotFound);
 };
 
 class PwdCommand : public BaseCommand {

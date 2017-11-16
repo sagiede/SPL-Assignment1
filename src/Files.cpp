@@ -99,6 +99,15 @@ string Directory::typeToString() {
     return "DIR";
 }
 
+BaseFile *Directory::findFileByName(string name) {
+    for (BaseFile *child : getChildren()) {
+        if (child->getName() == name) {
+            return child;
+        }
+    }
+    return nullptr;
+};
+
 Directory *Directory::findDirByName(string name) {
     for (BaseFile *child : getChildren()) {
         if (child->getName() == name && child->typeToString() == "DIR") {

@@ -13,10 +13,50 @@ string BaseCommand::getArgs() {
     return args;
 };
 
+Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotFound) {
+    Directory *childDir;
+    Directory *curr;
+    string dirName;
+    size_t slashPos = path.find('/');
+    if (slashPos == 0) {
+        curr = &fs.getRootDirectory();
+        path = path.substr(1);
+        slashPos = path.find('/');
+    } else {
+        curr = &fs.getWorkingDirectory();
+    }
+
+    while (curr != nullptr && !path.empty()) {
+        if (slashPos == string::npos) {
+            dirName = path;
+            path = "";
+        } else {
+            dirName = path.substr(0, slashPos);
+            path = path.substr(slashPos + 1);
+        }
+
+        if (dirName == "..") {
+            childDir = curr->getParent();
+        } else {
+            childDir = curr->findDirByName(dirName);
+            if (childDir == nullptr && createIfNotFound) {
+                childDir = new Directory(dirName, curr);
+                curr->addFile(childDir);
+            }
+        }
+        curr = childDir;
+
+        slashPos = path.find('/');
+    }
+
+    return curr;
+};
+
+
 // pwd
 PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 
-string PwdCommand::toString() {    return "pwd";};
+string PwdCommand::toString() { return BaseCommand::toString(); };
 
 void PwdCommand::execute(FileSystem &fs) {
     cout << fs.getWorkingDirectory().getAbsolutePath() << endl;
@@ -25,81 +65,90 @@ void PwdCommand::execute(FileSystem &fs) {
 // cd
 CdCommand::CdCommand(string args) : BaseCommand(args) {};
 
-string CdCommand::toString() { return "cd"; };
+string CdCommand::toString() { return BaseCommand::toString(); };
 
 void CdCommand::execute(FileSystem &fs) {
-    string path = getArgs();
-    Directory *curr;
-    size_t spacePos = path.find('/');
-    if (spacePos == 0) {
-        curr = &fs.getRootDirectory();
-        path = path.substr(1);
-        spacePos = path.find('/');
+    Directory *curr = getToPath(fs, getArgs(), false);
+
+    if (curr == nullptr) {
+        cout << "The system cannot find the path specified" << endl;
     } else {
-        curr = &fs.getWorkingDirectory();
+        fs.setWorkingDirectory(curr);
     }
-    string dirName = path.substr(0, spacePos);
-    while (!dirName.empty()) {
-        if (spacePos == string::npos) { // TODO check tailing /
-            path = "";
-        } else {
-            path = path.substr(spacePos + 1);
-        }
-        if (dirName == "..") {
-            curr = curr->getParent();
-        } else {
-            curr = curr->findDirByName(dirName);
-        }
-
-        spacePos = path.find('/');
-        dirName = path.substr(0, spacePos);
-        path = path.substr(spacePos + 1);
-    }
-
-    fs.setWorkingDirectory(curr);
 }
 
 // mkdir
 MkdirCommand::MkdirCommand(string args) : BaseCommand(args) {};
 
-string MkdirCommand::toString() { return "mkdir"; };
+string MkdirCommand::toString() { return BaseCommand::toString(); };
 
 void MkdirCommand::execute(FileSystem &fs) {
-    Directory *newDir = new Directory(getArgs(), &fs.getWorkingDirectory());
-    fs.getWorkingDirectory().addFile(newDir);
+    Directory *curr;
+    string dirName;
+    size_t lastSlashPos = getArgs().find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        dirName = getArgs();
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        dirName = getArgs().substr(1);
+    } else {
+        string path = getArgs().substr(0, lastSlashPos);
+        dirName = getArgs().substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, true);
+    }
+    if (curr->findDirByName(dirName) == nullptr) {
+        Directory *newDir = new Directory(dirName, curr);
+        curr->addFile(newDir);
+    } else {
+        cout << "The directory already exists" << endl;
+    }
 }
 
-// mkfile
+// mkdir
 MkfileCommand::MkfileCommand(string args) : BaseCommand(args) {};
 
-string MkfileCommand::toString() { return "mkfile"; };
+string MkfileCommand::toString() { return BaseCommand::toString(); };
 
 void MkfileCommand::execute(FileSystem &fs) {
-    string args = getArgs();
-    size_t spacePos = args.find(' ');
-    string filePath = args.substr(0, spacePos);
-    int size = stoi(args.substr(spacePos + 1, args.length() - spacePos - 1));
-    File *newFile = new File(filePath, size);
-    fs.getWorkingDirectory().addFile(newFile);
-}
+    size_t spacePos = getArgs().find(' ');
+    string filePath = getArgs().substr(0, spacePos);
+    int size = stoi(getArgs().substr(spacePos + 1, getArgs().length() - spacePos - 1));
 
+    Directory *curr;
+    string fileName;
+    size_t lastSlashPos = filePath.find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        fileName = filePath;
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        fileName = filePath.substr(1);
+    } else {
+        string path = filePath.substr(0, lastSlashPos);
+        fileName = filePath.substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, false);
+    }
+    if (curr == nullptr) {
+        cout << "The system cannot find the path specified" << endl;
+    } else if (curr->findFileByName(fileName) == nullptr) {
+        File *newFile = new File(fileName, size);
+        curr->addFile(newFile);
+    } else {
+        cout << "File already exists" << endl;
+    }
+}
 
 // ls
 LsCommand::LsCommand(string args) : BaseCommand(args) {};
 
-string LsCommand::toString() { return "ls"; };
+string LsCommand::toString() { return BaseCommand::toString(); };
 
 void LsCommand::execute(FileSystem &fs) {
     for (BaseFile *child : fs.getWorkingDirectory().getChildren()) {
         cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
     }
 }
-
-
-
-
-
-
 
 //History
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
@@ -122,7 +171,7 @@ void ExecCommand::execute(FileSystem &fs) {
     if(index >= history.size())
         cout << "Command not found" << endl;
     else
-    history.at(index)->execute(fs);
+        history.at(index)->execute(fs);
 }
 string ExecCommand::toString() { return "exec"; }
 
@@ -133,9 +182,4 @@ void ErrorCommand::execute(FileSystem &fs) {
         cout << getArgs() <<": Unknown command" << endl;
 }
 string ErrorCommand::toString() { return getArgs(); }
-
-
-
-
-
 
