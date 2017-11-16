@@ -16,7 +16,7 @@ string BaseCommand::getArgs() {
 // pwd
 PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 
-string PwdCommand::toString() { return BaseCommand::toString(); };
+string PwdCommand::toString() {    return "pwd";};
 
 void PwdCommand::execute(FileSystem &fs) {
     cout << fs.getWorkingDirectory().getAbsolutePath() << endl;
@@ -25,7 +25,7 @@ void PwdCommand::execute(FileSystem &fs) {
 // cd
 CdCommand::CdCommand(string args) : BaseCommand(args) {};
 
-string CdCommand::toString() { return BaseCommand::toString(); };
+string CdCommand::toString() { return "cd"; };
 
 void CdCommand::execute(FileSystem &fs) {
     string path = getArgs();
@@ -62,17 +62,17 @@ void CdCommand::execute(FileSystem &fs) {
 // mkdir
 MkdirCommand::MkdirCommand(string args) : BaseCommand(args) {};
 
-string MkdirCommand::toString() { return BaseCommand::toString(); };
+string MkdirCommand::toString() { return "mkdir"; };
 
 void MkdirCommand::execute(FileSystem &fs) {
     Directory *newDir = new Directory(getArgs(), &fs.getWorkingDirectory());
     fs.getWorkingDirectory().addFile(newDir);
 }
 
-// mkdir
+// mkfile
 MkfileCommand::MkfileCommand(string args) : BaseCommand(args) {};
 
-string MkfileCommand::toString() { return BaseCommand::toString(); };
+string MkfileCommand::toString() { return "mkfile"; };
 
 void MkfileCommand::execute(FileSystem &fs) {
     string args = getArgs();
@@ -83,14 +83,41 @@ void MkfileCommand::execute(FileSystem &fs) {
     fs.getWorkingDirectory().addFile(newFile);
 }
 
+
 // ls
 LsCommand::LsCommand(string args) : BaseCommand(args) {};
 
-string LsCommand::toString() { return BaseCommand::toString(); };
+string LsCommand::toString() { return "ls"; };
 
 void LsCommand::execute(FileSystem &fs) {
     for (BaseFile *child : fs.getWorkingDirectory().getChildren()) {
         cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
     }
 }
+
+
+
+
+
+
+
+//History
+HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
+        : BaseCommand(args) , history(refHistory) {}
+
+void HistoryCommand::execute(FileSystem &fs) {
+
+    for(int i=0 ; i <history.size(); i++) {
+        cout << i << "\t" << history.at(i)->toString() <<endl;
+    }
+}
+string HistoryCommand::toString() { return "history"; }
+
+
+
+
+
+
+
+
 
