@@ -56,7 +56,7 @@ Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotF
 // pwd
 PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 
-string PwdCommand::toString() { return BaseCommand::toString(); };
+string PwdCommand::toString() { return "pwd"; };
 
 void PwdCommand::execute(FileSystem &fs) {
     cout << fs.getWorkingDirectory().getAbsolutePath() << endl;
@@ -65,7 +65,7 @@ void PwdCommand::execute(FileSystem &fs) {
 // cd
 CdCommand::CdCommand(string args) : BaseCommand(args) {};
 
-string CdCommand::toString() { return BaseCommand::toString(); };
+string CdCommand::toString() { return "cd"; };
 
 void CdCommand::execute(FileSystem &fs) {
     Directory *curr = getToPath(fs, getArgs(), false);
@@ -80,7 +80,7 @@ void CdCommand::execute(FileSystem &fs) {
 // mkdir
 MkdirCommand::MkdirCommand(string args) : BaseCommand(args) {};
 
-string MkdirCommand::toString() { return BaseCommand::toString(); };
+string MkdirCommand::toString() { return "mkdir"; };
 
 void MkdirCommand::execute(FileSystem &fs) {
     Directory *curr;
@@ -108,7 +108,7 @@ void MkdirCommand::execute(FileSystem &fs) {
 // mkdir
 MkfileCommand::MkfileCommand(string args) : BaseCommand(args) {};
 
-string MkfileCommand::toString() { return BaseCommand::toString(); };
+string MkfileCommand::toString() { return "mkfile"; };
 
 void MkfileCommand::execute(FileSystem &fs) {
     size_t spacePos = getArgs().find(' ');
@@ -142,7 +142,7 @@ void MkfileCommand::execute(FileSystem &fs) {
 // ls
 LsCommand::LsCommand(string args) : BaseCommand(args) {};
 
-string LsCommand::toString() { return BaseCommand::toString(); };
+string LsCommand::toString() { return "ls"; };
 
 void LsCommand::execute(FileSystem &fs) {
     for (BaseFile *child : fs.getWorkingDirectory().getChildren()) {
@@ -152,34 +152,37 @@ void LsCommand::execute(FileSystem &fs) {
 
 //History
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
-        : BaseCommand(args) , history(refHistory) {}
+        : BaseCommand(args), history(refHistory) {}
 
 void HistoryCommand::execute(FileSystem &fs) {
 
-    for(int i=0 ; i <history.size(); i++) {
-        cout << i << "\t" << history.at(i)->toString() <<endl;
+    for (int i = 0; i < history.size(); i++) {
+        cout << i << "\t" << history.at(i)->toString() << endl;
     }
 }
+
 string HistoryCommand::toString() { return "history"; }
 
 //Exec
 ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &refHistory)
-        : BaseCommand(args) , history(refHistory) {}
+        : BaseCommand(args), history(refHistory) {}
 
 void ExecCommand::execute(FileSystem &fs) {
     int index = std::stoi(getArgs());
-    if(index >= history.size())
+    if (index >= history.size())
         cout << "Command not found" << endl;
     else
         history.at(index)->execute(fs);
 }
+
 string ExecCommand::toString() { return "exec"; }
 
 //Error
 ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
 
 void ErrorCommand::execute(FileSystem &fs) {
-        cout << getArgs() <<": Unknown command" << endl;
+    cout << getArgs() << ": Unknown command" << endl;
 }
+
 string ErrorCommand::toString() { return getArgs(); }
 
