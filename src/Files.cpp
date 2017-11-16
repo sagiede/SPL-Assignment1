@@ -143,11 +143,11 @@ Directory *Directory::getParent() const {
     return parent;
 }
 
-bool compareByAlphabetic(BaseFile* fileA, BaseFile* fileB) {
+bool compareByAlphabetic(BaseFile *fileA, BaseFile *fileB) {
     return fileA->getName().compare(fileB->getName()) < 0;
 }
 
-bool compareBySize(BaseFile* fileA, BaseFile* fileB) {
+bool compareBySize(BaseFile *fileA, BaseFile *fileB) {
     int fileASize = fileA->getSize();
     int fileBSize = fileB->getSize();
 
@@ -163,4 +163,12 @@ void Directory::sortByName() {
 
 void Directory::sortBySize() {
     sort(children.begin(), children.end(), compareBySize);
+}
+
+void Directory::removeFile(string name) {
+    removeFile(findFileByName(name));
+}
+
+void Directory::removeFile(BaseFile *file) {
+    children.erase(remove(children.begin(), children.end(), file), children.end());
 }

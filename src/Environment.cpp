@@ -47,6 +47,10 @@ void Environment::start() {
             RenameCommand *command = new RenameCommand(args);
             command->execute(fs);
             addToHistory(command);
+        } else if (commandStr == "rm") {
+            RmCommand *command = new RmCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "history") {
             HistoryCommand *command = new HistoryCommand(args, getHistory());
             command->execute(fs);
@@ -57,6 +61,8 @@ void Environment::start() {
             addToHistory(command);
         } else {
             ErrorCommand *command = new ErrorCommand(commandStr);
+            command->execute(fs);
+            addToHistory(command);
         }
     }
     // TODO start

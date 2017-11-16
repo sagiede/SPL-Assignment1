@@ -172,7 +172,7 @@ void LsCommand::execute(FileSystem &fs) {
 // rename
 RenameCommand::RenameCommand(string args) : BaseCommand(args) {};
 
-string RenameCommand::toString() { return "ls"; };
+string RenameCommand::toString() { return "rename"; };
 
 void RenameCommand::execute(FileSystem &fs) {
     size_t spacePos = getArgs().find(' ');
@@ -194,11 +194,47 @@ void RenameCommand::execute(FileSystem &fs) {
         curr = getToPath(fs, path, false);
     }
     if (curr == nullptr || curr->findFileByName(fileName) == nullptr) {
-        cout << "No such file or directory”" << endl;
+        cout << "No such file or directory" << endl;
     } else if (curr == &fs.getWorkingDirectory()) {
         cout << "Can’t rename the working directory" << endl;
     } else {
         curr->findFileByName(fileName)->setName(newName);
+    }
+}
+
+// rm
+RmCommand::RmCommand(string args) : BaseCommand(args) {};
+
+string RmCommand::toString() { return "rm"; };
+
+void RmCommand::execute(FileSystem &fs) {
+    Directory *curr;
+    string fileName;
+    size_t lastSlashPos = getArgs().find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        fileName = getArgs();
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        fileName = getArgs().substr(1);
+    } else {
+        string path = getArgs().substr(0, lastSlashPos);
+        fileName = getArgs().substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, false);
+    }
+    BaseFile *file = curr;
+    if (curr != nullptr) {
+        if (!fileName.empty()) {
+            file = curr->findFileByName(fileName);
+        }
+    }
+
+    if (curr == nullptr || file == nullptr) {
+        cout << "No such file or directory" << endl;
+    } else if (file == &fs.getRootDirectory() || file == &fs.getWorkingDirectory()) {
+        cout << "Can’t remove directory" << endl;
+    } else {
+        curr->removeFile(file);
     }
 }
 
