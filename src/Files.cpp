@@ -10,9 +10,12 @@ using namespace std;
 
 //  ~~~~~~~~ BASEFILE ~~~~~~~~~
 BaseFile::BaseFile(string name) : name(name) {}
+
 BaseFile::BaseFile(const BaseFile &aBaseFile) {}
+
 BaseFile::~BaseFile() {}
-BaseFile & BaseFile :: operator=(const BaseFile & aBaseFile){}
+
+BaseFile &BaseFile::operator=(const BaseFile &aBaseFile) {}
 
 string BaseFile::getName() const {
     return name;
@@ -23,9 +26,11 @@ string BaseFile::typeToString() {}
 void BaseFile::setName(string newName) {
     name = newName;
 }
+
 // File
 File::File(string name, int size) : BaseFile(name), size(size) {}
-File::~File(){};
+
+File::~File() {};
 
 int File::getSize() {
     return size;
@@ -56,7 +61,8 @@ void Directory::clear() {
 }
 
 
-Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()), parent(aDirectory.parent) {   //copy constructor
+Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()),
+                                                    parent(aDirectory.parent) {   //copy constructor
 
     for (BaseFile *child : aDirectory.children) {
         children.push_back(child->clone());
@@ -71,7 +77,7 @@ BaseFile *Directory::clone() {                                  //private func
     return dir;
 }
 
-Directory & Directory::operator=(const Directory &aDirectory)    //assignment = operator
+Directory &Directory::operator=(const Directory &aDirectory)    //assignment = operator
 {
     if (this != &aDirectory) {
         clear();
@@ -137,3 +143,24 @@ Directory *Directory::getParent() const {
     return parent;
 }
 
+bool compareByAlphabetic(BaseFile* fileA, BaseFile* fileB) {
+    return fileA->getName().compare(fileB->getName()) < 0;
+}
+
+bool compareBySize(BaseFile* fileA, BaseFile* fileB) {
+    int fileASize = fileA->getSize();
+    int fileBSize = fileB->getSize();
+
+    if (fileASize == fileBSize)
+        return compareByAlphabetic(fileA, fileB);
+    else
+        return fileASize < fileBSize;
+}
+
+void Directory::sortByName() {
+    sort(children.begin(), children.end(), compareByAlphabetic);
+}
+
+void Directory::sortBySize() {
+    sort(children.begin(), children.end(), compareBySize);
+}

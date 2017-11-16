@@ -145,8 +145,27 @@ LsCommand::LsCommand(string args) : BaseCommand(args) {};
 string LsCommand::toString() { return "ls"; };
 
 void LsCommand::execute(FileSystem &fs) {
-    for (BaseFile *child : fs.getWorkingDirectory().getChildren()) {
-        cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
+    Directory *dir;
+    string dirStr = getArgs();
+    if (dirStr.substr(0, 2) == "-s") {
+        dir = dirStr.length() > 3 ? getToPath(fs, dirStr.substr(3), false) : &fs.getWorkingDirectory();
+        if (dir == nullptr) {
+            cout << "The system cannot find the path specified" << endl;
+        } else {
+            dir->sortBySize();
+        }
+    } else {
+        dir = getToPath(fs, dirStr, false);
+        if (dir == nullptr) {
+            cout << "The system cannot find the path specified" << endl;
+        } else {
+            dir->sortByName();
+        }
+    }
+    if (dir != nullptr) {
+        for (BaseFile *child : dir->getChildren()) {
+            cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
+        }
     }
 }
 
