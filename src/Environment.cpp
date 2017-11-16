@@ -24,20 +24,40 @@ void Environment::start() {
         }
 
         if (commandStr == "pwd") {
-            PwdCommand command(args);
-            command.execute(fs);
+            PwdCommand* command = new PwdCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "cd") {
-            CdCommand command(args);
-            command.execute(fs);
+            CdCommand* command = new CdCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "mkdir") {
-            MkdirCommand command(args);
-            command.execute(fs);
+            MkdirCommand* command = new MkdirCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "mkfile") {
-            MkfileCommand command(args);
-            command.execute(fs);
+            MkfileCommand* command = new MkfileCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr == "ls") {
-            LsCommand command(args);
-            command.execute(fs);
+            LsCommand* command = new LsCommand(args);
+            command->execute(fs);
+            addToHistory(command);
+        }
+          else if (commandStr == "history") {
+        HistoryCommand* command = new HistoryCommand(args,getHistory());
+        command->execute(fs);
+        addToHistory(command);
+        }
+        else if (commandStr == "exec") {
+            ExecCommand* command = new ExecCommand(args,getHistory());
+            command->execute(fs);
+            addToHistory(command);
+        }
+        else{
+            ErrorCommand* command = new ErrorCommand(commandStr);
+            command->execute(fs);
+            addToHistory(command);
         }
     }
     // TODO start
@@ -47,11 +67,18 @@ FileSystem &Environment::getFileSystem() {
     return fs;
 }
 
-/*void Environment::addToHistory(BaseCommand *command) {
+void Environment::addToHistory(BaseCommand *command) {
     commandsHistory.push_back(command);
 }
 
 const vector<BaseCommand *> &Environment::getHistory() const {
     return commandsHistory;
-}*/
+}
+
+Environment::~Environment() {
+    for (BaseCommand *command : commandsHistory) {
+        delete command;
+    }
+}
+
 
