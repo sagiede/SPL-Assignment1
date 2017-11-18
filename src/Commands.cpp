@@ -186,3 +186,50 @@ void ErrorCommand::execute(FileSystem &fs) {
 
 string ErrorCommand::toString() { return getArgs(); }
 
+//Copy
+
+//CpCommand::CpCommand(string args) : BaseCommand(args) {}
+
+/*void CpCommand::execute(FileSystem &fs) {
+    size_t spacePos = getArgs().find(' ');
+
+    string sourcePath = getArgs().substr(0, spacePos);
+    string destPath = getArgs().substr(spacePos+1);
+    Directory* papaSrc;
+    Directory* papaDest;
+    File* fileSrc;
+    string fileSrcName;
+    bool isDirectory;
+
+    size_t lastSlashPos = sourcePath.find_last_of('/');
+
+
+
+
+    if (lastSlashPos == string::npos) {
+        papaSrc = &fs.getWorkingDirectory();
+        fileSrcName = sourcePath;
+    } else if (lastSlashPos == 0) {
+        papaSrc = &fs.getRootDirectory();
+        fileSrcName = sourcePath.substr(1);
+    } else {
+        string path = sourcePath.substr(0, lastSlashPos);
+        fileSrcName = sourcePath.substr(lastSlashPos + 1);
+        papaSrc = getToPath(fs, path, false);
+    }
+    if (papaSrc == nullptr | papaSrc->findFileByName(fileSrcName) == nullptr) {
+        cout << "No such file or directory" << endl;
+    } else {
+        if (papaSrc->findDirByName(fileSrcName) == nullptr)
+        fileSrc = new File(*papaSrc->findFileByName(fileSrcName));
+
+        else
+            fileSrc = new File(fileName, size);
+    }
+
+
+
+
+}*/
+
+
