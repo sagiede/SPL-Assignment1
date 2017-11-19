@@ -1,0 +1,22 @@
+mkdir a
+mkdir b
+mkdir c
+cd a
+mkdir aa
+mkfile f 10
+cd aa
+mkdir aaa
+cd aaa
+mkfile f20 20
+cd /a
+cp aa /b
+cp aa /
+cd /
+cp a/aa/aaa /
+cp a c
+cd c
+mkfile fl 100
+cp fl100 /
+cd /
+ls
+exit

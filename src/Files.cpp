@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -45,6 +46,10 @@ BaseFile *File::clone() {
     return file;
 }
 
+File::File(const File &aFile)  : BaseFile(aFile.getName()) {
+    size = aFile.size;
+}
+
 
 //  ~~~~~~~~ DIRECTORY  ~~~~~~~~
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
@@ -57,6 +62,7 @@ void Directory::clear() {
     parent = nullptr;
     for (BaseFile *child : children) {
         delete child;
+        child = nullptr;
     }
 }
 
