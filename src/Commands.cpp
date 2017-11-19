@@ -195,7 +195,6 @@ void CpCommand::execute(FileSystem &fs) {
     size_t spacePos = getArgs().find(' ');
 
     string sourcePath = getArgs().substr(0, spacePos);
-    string destPath = getArgs().substr(spacePos+1);
     Directory* papaSrc;
     File* fileSrc;
     Directory* dirSrc;
@@ -224,12 +223,14 @@ void CpCommand::execute(FileSystem &fs) {
         }
         else{
             dirSrc = new Directory((Directory&)*papaSrc->findFileByName(fileSrcName));
+            //dirSrc =  new Directory("test" , nullptr);
             isFileAFile = false;
         }
     }
 
     // search the destination path and paste the file
 
+    string destPath = getArgs().substr(spacePos+1);
     Directory* papaDest;
     string papaDestName;
     Directory* grandpaDest;
@@ -237,13 +238,13 @@ void CpCommand::execute(FileSystem &fs) {
     size_t lastSlashPos2 = destPath.find_last_of('/');
     if (lastSlashPos2 == string::npos) {
         grandpaDest = &fs.getWorkingDirectory();
-        papaDestName = sourcePath;
+        papaDestName = destPath;
     } else if (lastSlashPos2 == 0) {
         grandpaDest = &fs.getRootDirectory();
-        papaDestName = sourcePath.substr(1);
+        papaDestName = destPath.substr(1);                  //TODO check if i can paste on the root
     } else {
-        string path = sourcePath.substr(0, lastSlashPos2);
-        papaDestName = sourcePath.substr(lastSlashPos2 + 1);
+        string path = destPath.substr(0, lastSlashPos2);
+        papaDestName = destPath.substr(lastSlashPos2 + 1);
         grandpaDest = getToPath(fs, path, false);
     }
     if (grandpaDest == nullptr || grandpaDest->findDirByName(papaDestName) == nullptr) {
@@ -254,15 +255,19 @@ void CpCommand::execute(FileSystem &fs) {
             delete dirSrc;
     }
      else {
-        papaDest = grandpaDest->findDirByName(fileSrcName);
-        if(isFileAFile){
-            papaDest->addFile(fileSrc);
-        }
+        papaDest = grandpaDest->findDirByName(papaDestName);
+        if(papaDest->findFileByName(fileSrcName) != nullptr)
+            cout << "The directory already exists" << endl;
         else{
-            papaDest->addFile(dirSrc);
-            dirSrc->setParent(papaDest);
+            if(isFileAFile){
+                papaDest->addFile(fileSrc);
+            }
+            else{
+                papaDest->addFile(dirSrc);
+                dirSrc->setParent(papaDest);
+            }
         }
-    }
+        }
 
 }
 
