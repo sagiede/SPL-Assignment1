@@ -135,8 +135,7 @@ void MkfileCommand::execute(FileSystem &fs) {
     if (curr == nullptr) {
         cout << "The system cannot find the path specified" << endl;
     } else if (curr->findFileByName(fileName) == nullptr) {
-        File *newFile = new File(fileName, size);
-        curr->addFile(newFile);
+        curr->addFile(new File(fileName, size));
     } else {
         cout << "File already exists" << endl;
     }
