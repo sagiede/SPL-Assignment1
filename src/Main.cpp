@@ -8,7 +8,7 @@ unsigned int verbose = 0;
 
 int main(int, char **) {
 
-    Directory* root = new Directory("dir", nullptr );
+  /*  Directory* root = new Directory("dir", nullptr );
     Directory* a = new Directory("a", root );
     Directory* b = new Directory("b", root );
     Directory* a1 = new Directory("a1", a );
@@ -21,10 +21,10 @@ int main(int, char **) {
     a1->addFile(a2);
     Directory* testPointer = b;
     *testPointer = *a;
-    cout << "end" << endl;
+    cout << "end" << endl;*/
 
-   // Environment env;
-    //env.start();
+    Environment env;
+    env.start();
 
 
 

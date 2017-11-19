@@ -54,6 +54,11 @@ void Environment::start() {
             command->execute(fs);
             addToHistory(command);
         }
+        else if (commandStr == "cp") {
+            CpCommand* command = new CpCommand(args);
+            command->execute(fs);
+            addToHistory(command);
+        }
         else{
             ErrorCommand* command = new ErrorCommand(commandStr);
             command->execute(fs);

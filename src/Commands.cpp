@@ -188,24 +188,23 @@ string ErrorCommand::toString() { return getArgs(); }
 
 //Copy
 
-//CpCommand::CpCommand(string args) : BaseCommand(args) {}
+CpCommand::CpCommand(string args) : BaseCommand(args) {}
+string CpCommand::toString() {return "cp"; }
 
-/*void CpCommand::execute(FileSystem &fs) {
+void CpCommand::execute(FileSystem &fs) {
     size_t spacePos = getArgs().find(' ');
 
     string sourcePath = getArgs().substr(0, spacePos);
     string destPath = getArgs().substr(spacePos+1);
     Directory* papaSrc;
-    Directory* papaDest;
     File* fileSrc;
+    Directory* dirSrc;
+    bool isFileAFile = true;
     string fileSrcName;
-    bool isDirectory;
 
     size_t lastSlashPos = sourcePath.find_last_of('/');
 
-
-
-
+    // search the source path and copy file
     if (lastSlashPos == string::npos) {
         papaSrc = &fs.getWorkingDirectory();
         fileSrcName = sourcePath;
@@ -217,19 +216,54 @@ string ErrorCommand::toString() { return getArgs(); }
         fileSrcName = sourcePath.substr(lastSlashPos + 1);
         papaSrc = getToPath(fs, path, false);
     }
-    if (papaSrc == nullptr | papaSrc->findFileByName(fileSrcName) == nullptr) {
+    if (papaSrc == nullptr || papaSrc->findFileByName(fileSrcName) == nullptr) {
         cout << "No such file or directory" << endl;
     } else {
-        if (papaSrc->findDirByName(fileSrcName) == nullptr)
-        fileSrc = new File(*papaSrc->findFileByName(fileSrcName));
-
-        else
-            fileSrc = new File(fileName, size);
+        if (papaSrc->findDirByName(fileSrcName) == nullptr){
+        fileSrc = new File((File&)*papaSrc->findFileByName(fileSrcName));
+        }
+        else{
+            dirSrc = new Directory((Directory&)*papaSrc->findFileByName(fileSrcName));
+            isFileAFile = false;
+        }
     }
 
+    // search the destination path and paste the file
 
+    Directory* papaDest;
+    string papaDestName;
+    Directory* grandpaDest;
 
+    size_t lastSlashPos2 = destPath.find_last_of('/');
+    if (lastSlashPos2 == string::npos) {
+        grandpaDest = &fs.getWorkingDirectory();
+        papaDestName = sourcePath;
+    } else if (lastSlashPos2 == 0) {
+        grandpaDest = &fs.getRootDirectory();
+        papaDestName = sourcePath.substr(1);
+    } else {
+        string path = sourcePath.substr(0, lastSlashPos2);
+        papaDestName = sourcePath.substr(lastSlashPos2 + 1);
+        grandpaDest = getToPath(fs, path, false);
+    }
+    if (grandpaDest == nullptr || grandpaDest->findDirByName(papaDestName) == nullptr) {
+        cout << "No such file or directory" << endl;
+        if(isFileAFile)
+            delete fileSrc;
+        else
+            delete dirSrc;
+    }
+     else {
+        papaDest = grandpaDest->findDirByName(fileSrcName);
+        if(isFileAFile){
+            papaDest->addFile(fileSrc);
+        }
+        else{
+            papaDest->addFile(dirSrc);
+            dirSrc->setParent(papaDest);
+        }
+    }
 
-}*/
+}
 
 

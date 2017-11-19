@@ -142,3 +142,7 @@ Directory *Directory::getParent() const {
     return parent;
 }
 
+void Directory::setParent(Directory *newParent) {
+    parent = newParent;
+}
+
