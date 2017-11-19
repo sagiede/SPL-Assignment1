@@ -1,4 +1,5 @@
 #include "../include/Commands.h"
+#include "../include/GlobalVariables.h"
 
 #include <string>
 #include <iostream>
@@ -37,6 +38,8 @@ Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotF
 
         if (dirName == "..") {
             childDir = curr->getParent();
+        } else if (dirName == ".") {
+            childDir = curr;
         } else {
             childDir = curr->findDirByName(dirName);
             if (childDir == nullptr && createIfNotFound) {
@@ -145,17 +148,123 @@ LsCommand::LsCommand(string args) : BaseCommand(args) {};
 string LsCommand::toString() { return "ls"; };
 
 void LsCommand::execute(FileSystem &fs) {
-    for (BaseFile *child : fs.getWorkingDirectory().getChildren()) {
-        cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
+    Directory *dir;
+    string dirStr = getArgs();
+    if (dirStr.substr(0, 2) == "-s") {
+        dir = dirStr.length() > 3 ? getToPath(fs, dirStr.substr(3), false) : &fs.getWorkingDirectory();
+        if (dir == nullptr) {
+            cout << "The system cannot find the path specified" << endl;
+        } else {
+            dir->sortBySize();
+        }
+    } else {
+        dir = getToPath(fs, dirStr, false);
+        if (dir == nullptr) {
+            cout << "The system cannot find the path specified" << endl;
+        } else {
+            dir->sortByName();
+        }
+    }
+    if (dir != nullptr) {
+        for (BaseFile *child : dir->getChildren()) {
+            cout << child->typeToString() << "\t" << child->getName() << "\t" << child->getSize() << endl;
+        }
     }
 }
 
-//History
+// rename
+RenameCommand::RenameCommand(string args) : BaseCommand(args) {};
+
+string RenameCommand::toString() { return "rename"; };
+
+void RenameCommand::execute(FileSystem &fs) {
+    size_t spacePos = getArgs().find(' ');
+    string filePath = getArgs().substr(0, spacePos);
+    string newName = getArgs().substr(spacePos + 1, getArgs().length() - spacePos - 1);
+
+    Directory *curr;
+    string fileName;
+    size_t lastSlashPos = filePath.find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        fileName = filePath;
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        fileName = filePath.substr(1);
+    } else {
+        string path = filePath.substr(0, lastSlashPos);
+        fileName = filePath.substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, false);
+    }
+    if (curr == nullptr || curr->findFileByName(fileName) == nullptr) {
+        cout << "No such file or directory" << endl;
+    } else if (curr == &fs.getWorkingDirectory()) {
+        cout << "Can’t rename the working directory" << endl;
+    } else {
+        curr->findFileByName(fileName)->setName(newName);
+    }
+}
+
+// rm
+RmCommand::RmCommand(string args) : BaseCommand(args) {};
+
+string RmCommand::toString() { return "rm"; };
+
+void RmCommand::execute(FileSystem &fs) {
+    Directory *curr;
+    string fileName;
+    size_t lastSlashPos = getArgs().find_last_of('/');
+    if (lastSlashPos == string::npos) {
+        curr = &fs.getWorkingDirectory();
+        fileName = getArgs();
+    } else if (lastSlashPos == 0) {
+        curr = &fs.getRootDirectory();
+        fileName = getArgs().substr(1);
+    } else {
+        string path = getArgs().substr(0, lastSlashPos);
+        fileName = getArgs().substr(lastSlashPos + 1);
+        curr = getToPath(fs, path, false);
+    }
+    BaseFile *file = curr;
+    if (curr != nullptr) {
+        if (!fileName.empty()) {
+            file = curr->findFileByName(fileName);
+        }
+    }
+
+    if (curr == nullptr || file == nullptr) {
+        cout << "No such file or directory" << endl;
+    } else if (file == &fs.getRootDirectory() || file == &fs.getWorkingDirectory()) {
+        cout << "Can’t remove directory" << endl;
+    } else {
+        curr->removeFile(file);
+    }
+}
+
+// verbose
+VerboseCommand::VerboseCommand(string args) : BaseCommand(args) {};
+
+void VerboseCommand::execute(FileSystem &fs) {
+    verbose = stoul(getArgs());
+}
+
+string VerboseCommand::toString() { return "verbose"; }
+
+//Error
+ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
+
+void ErrorCommand::execute(FileSystem &fs) {
+    cout << getArgs() << ": Unknown command" << endl;
+}
+
+string ErrorCommand::toString() { return getArgs(); }
+
+
+// history
 HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}
 
 void HistoryCommand::execute(FileSystem &fs) {
-
     for (int i = 0; i < history.size(); i++) {
         cout << i << "\t" << history.at(i)->toString() << endl;
     }
@@ -163,7 +272,7 @@ void HistoryCommand::execute(FileSystem &fs) {
 
 string HistoryCommand::toString() { return "history"; }
 
-//Exec
+// exec
 ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}
 
@@ -176,15 +285,6 @@ void ExecCommand::execute(FileSystem &fs) {
 }
 
 string ExecCommand::toString() { return "exec"; }
-
-//Error
-ErrorCommand::ErrorCommand(string args) : BaseCommand(args) {}
-
-void ErrorCommand::execute(FileSystem &fs) {
-    cout << getArgs() << ": Unknown command" << endl;
-}
-
-string ErrorCommand::toString() { return getArgs(); }
 
 //Copy
 
@@ -219,7 +319,7 @@ void CpCommand::execute(FileSystem &fs) {
         cout << "No such file or directory" << endl;
     } else {
         if (papaSrc->findDirByName(fileSrcName) == nullptr){
-        fileSrc = new File((File&)*papaSrc->findFileByName(fileSrcName));
+            fileSrc = new File((File&)*papaSrc->findFileByName(fileSrcName));
         }
         else{
             dirSrc = new Directory((Directory&)*papaSrc->findFileByName(fileSrcName));
@@ -254,7 +354,7 @@ void CpCommand::execute(FileSystem &fs) {
         else
             delete dirSrc;
     }
-     else {
+    else {
         papaDest = grandpaDest->findDirByName(papaDestName);
         if(papaDest->findFileByName(fileSrcName) != nullptr)
             cout << "The directory already exists" << endl;
@@ -267,8 +367,6 @@ void CpCommand::execute(FileSystem &fs) {
                 dirSrc->setParent(papaDest);
             }
         }
-        }
+    }
 
 }
-
-
