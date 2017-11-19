@@ -100,7 +100,7 @@ void MkdirCommand::execute(FileSystem &fs) {
         dirName = getArgs().substr(lastSlashPos + 1);
         curr = getToPath(fs, path, true);
     }
-    if (curr->findDirByName(dirName) == nullptr) {
+    if (curr->findFileByName(dirName) == nullptr) {
         Directory *newDir = new Directory(dirName, curr);
         curr->addFile(newDir);
     } else {
@@ -329,59 +329,29 @@ void CpCommand::execute(FileSystem &fs) {
     }
 
     // search the destination path and paste the file
-
     string destPath = getArgs().substr(spacePos+1);
-    Directory* papaDest;
-    string papaDestName;
-    Directory* grandpaDest;
-    bool isDestRoot = false;
-
-    size_t lastSlashPos2 = destPath.find_last_of('/');
-    if (lastSlashPos2 == string::npos) {
-        grandpaDest = &fs.getWorkingDirectory();
-        papaDestName = destPath;
-    } else if (lastSlashPos2 == 0) {
-        if(destPath.size() == 1){
-            papaDest = &fs.getRootDirectory();
-            isDestRoot = true;
-        }
-        else{
-            grandpaDest = &fs.getRootDirectory();
-            papaDestName = destPath.substr(1);
-        }
-        //TODO check if i can paste on the root
-    } else {
-        string path = destPath.substr(0, lastSlashPos2);
-        papaDestName = destPath.substr(lastSlashPos2 + 1);
-        grandpaDest = getToPath(fs, path, false);
-    }
-    if (( !isDestRoot)&&(grandpaDest == nullptr || grandpaDest->findDirByName(papaDestName) == nullptr )) {
+    Directory *des = getToPath(fs, destPath, false);
+    if(des == nullptr){
         cout << "No such file or directory" << endl;
-        if(isFileAFile)
+        if(isFileAFile){
             delete fileSrc;
-        else
+        } else {
             delete dirSrc;
-    }
-    else {
-        if(!isDestRoot){
-            papaDest = grandpaDest->findDirByName(papaDestName);
         }
-        if(papaDest->findFileByName(fileSrcName) != nullptr){
-            cout << "The directory/file already exists" << endl;
-            if(isFileAFile)
-                delete fileSrc;
-            else
-                delete dirSrc;
+    } else if(des->findFileByName(isFileAFile ? fileSrc->getName() : dirSrc->getName())){
+        cout << "The directory/file already exists" << endl;
+        if(isFileAFile){
+            delete fileSrc;
+        } else {
+            delete dirSrc;
+        }
+    } else {
+        if(isFileAFile){
+            des->addFile(fileSrc);
         }
         else{
-            if(isFileAFile){
-                papaDest->addFile(fileSrc);
-            }
-            else{
-                papaDest->addFile(dirSrc);
-                dirSrc->setParent(papaDest);
-            }
+            des->addFile(dirSrc);
+            dirSrc->setParent(des);
         }
     }
-
 }
