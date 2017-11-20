@@ -18,6 +18,8 @@ private:
 public:
     Environment();
     ~Environment(); // Destructor
+    Environment(const Environment & aEnvironment);  //copy constructor
+    Environment& operator=(const Environment &aEnvironment);    //assignment = operator
 
     void start();
 

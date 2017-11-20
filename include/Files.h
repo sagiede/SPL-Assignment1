@@ -36,7 +36,7 @@ public:
     File(string name, int size); // Constructor
     ~File(); // Destructor
     File(const File &File);  //copy constructor
-    File& operator=(const BaseFile &aBaseFile);    //assignment = operator
+    //File& operator=(const File &aFile);    //assignment = operator
     BaseFile *clone();    //clone
     int getSize(); // Return the size of the file
     string typeToString();

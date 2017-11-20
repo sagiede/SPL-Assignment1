@@ -20,6 +20,7 @@ public:
     virtual string toString() = 0;
 
     Directory *getToPath(FileSystem &fs, string path, bool createIfNotFound);
+    virtual BaseCommand* clone() = 0;
 };
 
 class PwdCommand : public BaseCommand {
@@ -29,6 +30,8 @@ public:
 
     void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
     virtual string toString();
+
+    virtual PwdCommand* clone();
 };
 
 class CdCommand : public BaseCommand {
@@ -39,6 +42,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual CdCommand* clone();
 };
 
 class LsCommand : public BaseCommand {
@@ -49,6 +54,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual LsCommand* clone();
 };
 
 class MkdirCommand : public BaseCommand {
@@ -59,6 +66,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual MkdirCommand* clone();
 };
 
 class MkfileCommand : public BaseCommand {
@@ -69,6 +78,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual MkfileCommand* clone();
 };
 
 class CpCommand : public BaseCommand {
@@ -79,6 +90,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual CpCommand* clone();
 };
 
 class MvCommand : public BaseCommand {
@@ -89,6 +102,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual MvCommand* clone();
 };
 
 class RenameCommand : public BaseCommand {
@@ -99,6 +114,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual RenameCommand* clone();
 };
 
 class RmCommand : public BaseCommand {
@@ -109,6 +126,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual RmCommand* clone();
 };
 
 class HistoryCommand : public BaseCommand {
@@ -120,6 +139,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual HistoryCommand* clone();
 };
 
 
@@ -127,6 +148,8 @@ class VerboseCommand : public BaseCommand {
 private:
 public:
     VerboseCommand(string args);
+
+    virtual VerboseCommand* clone();
 
     void execute(FileSystem &fs);
 
@@ -141,6 +164,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual ErrorCommand* clone();
 };
 
 class ExecCommand : public BaseCommand {
@@ -152,6 +177,8 @@ public:
     void execute(FileSystem &fs);
 
     string toString();
+
+    virtual ExecCommand* clone();
 };
 
 

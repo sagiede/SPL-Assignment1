@@ -56,6 +56,8 @@ Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotF
 };
 
 
+
+
 // pwd
 PwdCommand::PwdCommand(string args) : BaseCommand(args) {};
 
@@ -353,4 +355,47 @@ void CpCommand::execute(FileSystem &fs) {
             dirSrc->setParent(des);
         }
     }
+
 }
+
+PwdCommand* PwdCommand::clone() {
+    return new PwdCommand(getArgs());
+}
+CdCommand* CdCommand::clone() {
+    return new CdCommand(getArgs());
+}
+LsCommand* LsCommand::clone() {
+    return new LsCommand(getArgs());
+}
+MkdirCommand* MkdirCommand::clone() {
+    return new MkdirCommand(getArgs());
+}
+MkfileCommand* MkfileCommand::clone() {
+    return new MkfileCommand(getArgs());
+}
+CpCommand* CpCommand::clone() {
+    return new CpCommand(getArgs());
+}
+//MvCommand* MvCommand::clone() {
+  //  return new MvCommand(getArgs());
+//}
+RenameCommand* RenameCommand::clone() {
+    return new RenameCommand(getArgs());
+}
+RmCommand* RmCommand::clone() {
+    return new RmCommand(getArgs());
+}
+VerboseCommand* VerboseCommand::clone() {
+    return new VerboseCommand(getArgs());
+}
+ErrorCommand* ErrorCommand::clone() {
+    return new ErrorCommand(getArgs());
+}
+HistoryCommand* HistoryCommand::clone() {
+
+    return new HistoryCommand(getArgs(), history);
+}
+ExecCommand* ExecCommand::clone() {
+    return new ExecCommand(getArgs(),history);
+}
+
