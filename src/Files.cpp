@@ -178,6 +178,7 @@ void Directory::removeFile(string name) {
 
 void Directory::removeFile(BaseFile *file) {
     children.erase(remove(children.begin(), children.end(), file), children.end());
+    delete file;
 }
 
 void Directory::setParent(Directory *newParent) {
