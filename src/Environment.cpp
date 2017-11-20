@@ -121,4 +121,22 @@ Environment::Environment(const Environment &aEnvironment) {
     }
 }
 
+Environment::Environment(Environment &&other) {
+    fs = other.fs;
+    for (BaseCommand *cmnd : other.commandsHistory) {
+        commandsHistory.push_back(cmnd->clone());
+    }
+}
+Environment& Environment::operator=(Environment &&other) {
+    if (this != &other) {
+        for (BaseCommand *command : commandsHistory) {
+            delete command;
+        }
+        fs = other.fs;
+        for (BaseCommand *cmnd : other.commandsHistory) {
+            commandsHistory.push_back(cmnd->clone());
+        }
+        return *this;
+    }
+}
 

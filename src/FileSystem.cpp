@@ -26,7 +26,7 @@ FileSystem& FileSystem::operator=(const FileSystem &aFileSystem) {
 
     if (this != &aFileSystem) {
         delete rootDirectory;
-        rootDirectory= new Directory(aFileSystem.getRootDirectory());
+        rootDirectory= new Directory(*&aFileSystem.getRootDirectory());
         workingDirectory = rootDirectory;
         return *this;
     }
@@ -34,6 +34,21 @@ FileSystem& FileSystem::operator=(const FileSystem &aFileSystem) {
 
 
 FileSystem::FileSystem(const FileSystem &aFileSystem) {
-    rootDirectory= new Directory(aFileSystem.getRootDirectory());
+    rootDirectory= new Directory(*&aFileSystem.getRootDirectory());
+    workingDirectory = rootDirectory;
+}
+
+FileSystem& FileSystem::operator=(FileSystem &&other) {
+    if (this != &other) {
+        delete rootDirectory;
+        rootDirectory= new Directory(*&other.getRootDirectory());
+        workingDirectory = rootDirectory;
+        return *this;
+    }
+}
+
+
+FileSystem::FileSystem(FileSystem &&other) {
+    rootDirectory= new Directory(*&other.getRootDirectory());
     workingDirectory = rootDirectory;
 }

@@ -97,6 +97,25 @@ Directory &Directory::operator=(const Directory &aDirectory)    //assignment = o
     }
 }
 
+Directory& Directory::operator=(Directory &&other) {        //move assignment = operator
+    if (this != &other) {
+        clear();
+        setName(other.getName());
+        parent = other.parent;
+        for (BaseFile *child : other.children) {
+            children.push_back(child->clone());
+        }
+        return *this;
+    }
+}
+//Directory::Directory(Directory &&other)
+  Directory::Directory(Directory &&other)  : BaseFile(other.getName()),
+                                                    parent(other.parent) {   //move copy constructor
+    for (BaseFile *child : other.children) {
+        children.push_back(child->clone());
+    }
+}
+
 
 string Directory::getAbsolutePath() {
     string fullPath = getName() + "/";

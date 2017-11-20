@@ -16,6 +16,8 @@ public:
     virtual ~BaseFile(); // Destructor
     BaseFile(const BaseFile &aBaseFile);  //copy constructor
     BaseFile& operator=(const BaseFile &aBaseFile);    //assignment = operator
+    BaseFile(BaseFile&& other);     //move constructor
+    BaseFile& operator=(BaseFile &&other);   //move assignment = operator
     string getName() const;
 
     void setName(string newName);
@@ -36,7 +38,9 @@ public:
     File(string name, int size); // Constructor
     ~File(); // Destructor
     File(const File &File);  //copy constructor
-    //File& operator=(const File &aFile);    //assignment = operator
+    File& operator=(const File &aFile);    //assignment = operator
+    File(File&& other);     //move constructor
+    File& operator=(File &&other);   //move assignment = operator
     BaseFile *clone();    //clone
     int getSize(); // Return the size of the file
     string typeToString();
@@ -56,6 +60,8 @@ public:
     ~Directory(); // Destructor
     Directory(const Directory &aDirectory);  //copy constructor
     Directory& operator=(const Directory &aDirectory);    //assignment = operator
+    Directory(Directory&& other);     //move constructor
+    Directory& operator=(Directory &&other);   //move assignment = operator
 
 
     Directory *getParent() const; // Return a pointer to the parent of this directory
