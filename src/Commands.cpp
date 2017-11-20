@@ -285,18 +285,18 @@ void ExecCommand::execute(FileSystem &fs) {
 
 string ExecCommand::toString() { return "exec"; }
 
-//Copy
-
+// cp
 CpCommand::CpCommand(string args) : BaseCommand(args) {}
-string CpCommand::toString() {return "cp"; }
+
+string CpCommand::toString() { return "cp"; }
 
 void CpCommand::execute(FileSystem &fs) {
     size_t spacePos = getArgs().find(' ');
 
     string sourcePath = getArgs().substr(0, spacePos);
-    Directory* papaSrc;
-    File* fileSrc;
-    Directory* dirSrc;
+    Directory *papaSrc;
+    File *fileSrc;
+    Directory *dirSrc;
     bool isFileAFile = true;
     string fileSrcName;
 
@@ -318,39 +318,129 @@ void CpCommand::execute(FileSystem &fs) {
         cout << "No such file or directory" << endl;
         return;
     } else {
-        if (papaSrc->findDirByName(fileSrcName) == nullptr){
-            fileSrc = new File((File&)*papaSrc->findFileByName(fileSrcName));
-        }
-        else{
-            dirSrc = new Directory((Directory&)*papaSrc->findFileByName(fileSrcName));
+        if (papaSrc->findDirByName(fileSrcName) == nullptr) {
+            fileSrc = new File((File &) *papaSrc->findFileByName(fileSrcName));
+        } else {
+            dirSrc = new Directory((Directory &) *papaSrc->findFileByName(fileSrcName));
             isFileAFile = false;
         }
     }
 
     // search the destination path and paste the file
-    string destPath = getArgs().substr(spacePos+1);
+    string destPath = getArgs().substr(spacePos + 1);
     Directory *des = getToPath(fs, destPath, false);
-    if(des == nullptr){
+    if (des == nullptr) {
         cout << "No such file or directory" << endl;
-        if(isFileAFile){
+        if (isFileAFile) {
             delete fileSrc;
         } else {
             delete dirSrc;
         }
-    } else if(des->findFileByName(isFileAFile ? fileSrc->getName() : dirSrc->getName())){
+    } else if (des->findFileByName(isFileAFile ? fileSrc->getName() : dirSrc->getName())) {
         cout << "The directory/file already exists" << endl;
-        if(isFileAFile){
+        if (isFileAFile) {
             delete fileSrc;
         } else {
             delete dirSrc;
         }
     } else {
-        if(isFileAFile){
+        if (isFileAFile) {
             des->addFile(fileSrc);
-        }
-        else{
+        } else {
             des->addFile(dirSrc);
             dirSrc->setParent(des);
+        }
+    }
+}
+
+
+// mv
+MvCommand::MvCommand(string args) : BaseCommand(args) {}
+
+string MvCommand::toString() { return "mv"; }
+
+void MvCommand::execute(FileSystem &fs) {
+    size_t spacePos = getArgs().find(' ');
+
+    string sourcePath = getArgs().substr(0, spacePos);
+    Directory *papaSrc;
+    File *fileSrc;
+    Directory *dirSrc;
+    bool isFileAFile = true;
+    string fileSrcName;
+
+    size_t lastSlashPos = sourcePath.find_last_of('/');
+
+    // search the source path and copy file
+    if (lastSlashPos == string::npos) {
+        papaSrc = &fs.getWorkingDirectory();
+        fileSrcName = sourcePath;
+    } else if (lastSlashPos == 0) {
+        papaSrc = &fs.getRootDirectory();
+        fileSrcName = sourcePath.substr(1);
+    } else {
+        string path = sourcePath.substr(0, lastSlashPos);
+        fileSrcName = sourcePath.substr(lastSlashPos + 1);
+        papaSrc = getToPath(fs, path, false);
+    }
+    if (papaSrc == nullptr || papaSrc->findFileByName(fileSrcName) == nullptr) {
+        if (sourcePath == "/") {
+            cout << "Can’t move directory" << endl;
+        } else {
+            cout << "No such file or directory" << endl;
+        }
+        return;
+    } else {
+        if (papaSrc->findDirByName(fileSrcName) == nullptr) {
+            fileSrc = new File((File &) *papaSrc->findFileByName(fileSrcName));
+        } else {
+            dirSrc = new Directory((Directory &) *papaSrc->findFileByName(fileSrcName));
+            isFileAFile = false;
+        }
+    }
+
+    // search the destination path and paste the file
+    string destPath = getArgs().substr(spacePos + 1);
+    Directory *des = getToPath(fs, destPath, false);
+    if (des == nullptr) {
+        cout << "No such file or directory" << endl;
+        if (isFileAFile) {
+            delete fileSrc;
+        } else {
+            delete dirSrc;
+        }
+    } else if (des->findFileByName(isFileAFile ? fileSrc->getName() : dirSrc->getName())) {
+        cout << "The directory/file already exists" << endl;
+        if (isFileAFile) {
+            delete fileSrc;
+        } else {
+            delete dirSrc;
+        }
+    } else {
+        bool isInPath = false;
+        Directory *curr = &fs.getWorkingDirectory();
+        while (curr != nullptr) {
+            if (!isFileAFile && curr == dirSrc) {
+                isInPath = true;
+            }
+            curr = curr->getParent();
+        }
+
+        if (isInPath) {
+            cout << "Can’t move directory" << endl;
+            if (isFileAFile) {
+                delete fileSrc;
+            } else {
+                delete dirSrc;
+            }
+        } else {
+            if (isFileAFile) {
+                des->addFile(fileSrc);
+            } else {
+                des->addFile(dirSrc);
+                dirSrc->setParent(des);
+            }
+            papaSrc->removeFile(fileSrcName);
         }
     }
 }

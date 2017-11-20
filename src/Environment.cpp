@@ -72,6 +72,10 @@ void Environment::start() {
             CpCommand *command = new CpCommand(args);
             command->execute(fs);
             addToHistory(command);
+        } else if (commandStr == "mv") {
+            MvCommand *command = new MvCommand(args);
+            command->execute(fs);
+            addToHistory(command);
         } else if (commandStr != "exit") {
             ErrorCommand *command = new ErrorCommand(commandStr);
             command->execute(fs);
