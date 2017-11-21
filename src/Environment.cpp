@@ -96,16 +96,21 @@ const vector<BaseCommand *> &Environment::getHistory() const {
     return commandsHistory;
 }
 
-Environment::~Environment() {
+Environment::~Environment() {                               //DESTRUCTOR
+    //if (verbose == 2 | verbose ==1)
+    //cout <<  << endl;
     for (BaseCommand *command : commandsHistory) {
         delete command;
     }
+    commandsHistory.clear();
 }
-Environment& Environment::operator=(const Environment &aEnvironment) {
+Environment& Environment::operator=(const Environment &aEnvironment) {  //opertaor =
+    cout << __FUNCTION__ << endl;
     if (this != &aEnvironment) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
         }
+        commandsHistory.clear();
         fs = aEnvironment.fs;
         for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
             commandsHistory.push_back(cmnd->clone());
@@ -114,28 +119,35 @@ Environment& Environment::operator=(const Environment &aEnvironment) {
     }
 }
 
-Environment::Environment(const Environment &aEnvironment) {
-    fs = aEnvironment.fs;
+Environment::Environment(const Environment &aEnvironment): fs(aEnvironment.fs) {    //copy constructor
+    cout << __FUNCTION__ << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
         commandsHistory.push_back(cmnd->clone());
     }
 }
 
-Environment::Environment(Environment &&other) {
-    fs = other.fs;
+Environment::Environment(Environment &&other) : fs(other.fs) {              //move constructor
+    cout << __FUNCTION__ << endl;
     for (BaseCommand *cmnd : other.commandsHistory) {
-        commandsHistory.push_back(cmnd->clone());
+        commandsHistory.push_back(cmnd);
+        cmnd = nullptr;
     }
+    other.commandsHistory.clear();
+
 }
-Environment& Environment::operator=(Environment &&other) {
+Environment& Environment::operator=(Environment &&other) {              //move assignment operator
+    cout << __FUNCTION__ << endl;
     if (this != &other) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
         }
+        commandsHistory.clear();
         fs = other.fs;
         for (BaseCommand *cmnd : other.commandsHistory) {
-            commandsHistory.push_back(cmnd->clone());
+            commandsHistory.push_back(cmnd);
+            cmnd = nullptr;
         }
+        other.commandsHistory.clear();
         return *this;
     }
 }

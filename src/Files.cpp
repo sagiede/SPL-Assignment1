@@ -56,6 +56,7 @@ File::File(const File &aFile)  : BaseFile(aFile.getName()) {
 Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
 
 Directory::~Directory() {
+    cout << __FUNCTION__ << endl;
     clear();
 }
 
@@ -65,12 +66,13 @@ void Directory::clear() {
         delete child;
         child = nullptr;
     }
+    children.clear();
 }
 
 
 Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()),
                                                     parent(aDirectory.parent) {   //copy constructor
-
+    cout << __FUNCTION__ << endl;
     for (BaseFile *child : aDirectory.children) {
         children.push_back(child->clone());
     }
@@ -86,6 +88,7 @@ BaseFile *Directory::clone() {                                  //private func
 
 Directory &Directory::operator=(const Directory &aDirectory)    //assignment = operator
 {
+    cout << __FUNCTION__ << endl;
     if (this != &aDirectory) {
         clear();
         setName(aDirectory.getName());
@@ -98,22 +101,30 @@ Directory &Directory::operator=(const Directory &aDirectory)    //assignment = o
 }
 
 Directory& Directory::operator=(Directory &&other) {        //move assignment = operator
+    cout << __FUNCTION__ << endl;
     if (this != &other) {
         clear();
         setName(other.getName());
         parent = other.parent;
         for (BaseFile *child : other.children) {
-            children.push_back(child->clone());
+            children.push_back(child);
+            child = nullptr;
         }
+        other.children.clear();
+        other.parent = nullptr;
         return *this;
     }
 }
-//Directory::Directory(Directory &&other)
+
   Directory::Directory(Directory &&other)  : BaseFile(other.getName()),
                                                     parent(other.parent) {   //move copy constructor
+      cout << __FUNCTION__ << endl;
     for (BaseFile *child : other.children) {
-        children.push_back(child->clone());
+        children.push_back(child);
+        child = nullptr;
     }
+      other.children.clear();
+      other.parent = nullptr;
 }
 
 
