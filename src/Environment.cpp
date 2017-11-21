@@ -97,15 +97,16 @@ const vector<BaseCommand *> &Environment::getHistory() const {
 }
 
 Environment::~Environment() {                               //DESTRUCTOR
-    //if (verbose == 2 | verbose ==1)
-    //cout <<  << endl;
+    if (verbose == 1 | verbose ==3)
+    cout << "Environment::~Environment()" << endl;
     for (BaseCommand *command : commandsHistory) {
         delete command;
     }
     commandsHistory.clear();
 }
 Environment& Environment::operator=(const Environment &aEnvironment) {  //opertaor =
-    cout << __FUNCTION__ << endl;
+    if (verbose == 1 | verbose ==3)
+    cout << "Environment& Environment::operator=(const Environment &aEnvironment)" << endl;
     if (this != &aEnvironment) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
@@ -120,14 +121,16 @@ Environment& Environment::operator=(const Environment &aEnvironment) {  //operta
 }
 
 Environment::Environment(const Environment &aEnvironment): fs(aEnvironment.fs) {    //copy constructor
-    cout << __FUNCTION__ << endl;
+    if (verbose == 1 | verbose ==3)
+    cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
         commandsHistory.push_back(cmnd->clone());
     }
 }
 
 Environment::Environment(Environment &&other) : fs(other.fs) {              //move constructor
-    cout << __FUNCTION__ << endl;
+    if (verbose == 1 | verbose ==3)
+    cout << "Environment::Environment(Environment &&other)" << endl;
     for (BaseCommand *cmnd : other.commandsHistory) {
         commandsHistory.push_back(cmnd);
         cmnd = nullptr;
@@ -136,7 +139,8 @@ Environment::Environment(Environment &&other) : fs(other.fs) {              //mo
 
 }
 Environment& Environment::operator=(Environment &&other) {              //move assignment operator
-    cout << __FUNCTION__ << endl;
+    if (verbose == 1 | verbose ==3)
+    cout << "Environment& Environment::operator=(Environment &&other)" << endl;
     if (this != &other) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
