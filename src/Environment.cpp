@@ -97,7 +97,7 @@ const vector<BaseCommand *> &Environment::getHistory() const {
 }
 
 Environment::~Environment() {                               //DESTRUCTOR
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "Environment::~Environment()" << endl;
     for (BaseCommand *command : commandsHistory) {
         delete command;
@@ -106,7 +106,7 @@ Environment::~Environment() {                               //DESTRUCTOR
 }
 
 Environment &Environment::operator=(const Environment &aEnvironment) {  //opertaor =
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "Environment& Environment::operator=(const Environment &aEnvironment)" << endl;
     if (this != &aEnvironment) {
         for (BaseCommand *command : commandsHistory) {
@@ -122,7 +122,7 @@ Environment &Environment::operator=(const Environment &aEnvironment) {  //operta
 }
 
 Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs) {    //copy constructor
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
         commandsHistory.push_back(cmnd->clone());
@@ -130,7 +130,7 @@ Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs) 
 }
 
 Environment::Environment(Environment &&other) : fs(other.fs) {              //move constructor
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "Environment::Environment(Environment &&other)" << endl;
     for (BaseCommand *cmnd : other.commandsHistory) {
         commandsHistory.push_back(cmnd);
@@ -141,7 +141,7 @@ Environment::Environment(Environment &&other) : fs(other.fs) {              //mo
 }
 
 Environment &Environment::operator=(Environment &&other) {              //move assignment operator
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "Environment& Environment::operator=(Environment &&other)" << endl;
     if (this != &other) {
         for (BaseCommand *command : commandsHistory) {

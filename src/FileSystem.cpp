@@ -12,7 +12,7 @@ FileSystem::FileSystem() {
 }
 
 FileSystem::~FileSystem() {                 //destructor
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "FileSystem::~FileSystem()" << endl;
     delete rootDirectory;
 }
@@ -30,7 +30,7 @@ void FileSystem::setWorkingDirectory(Directory *newWorkingDirectory) {
 }
 
 FileSystem &FileSystem::operator=(const FileSystem &aFileSystem) {      //operator =
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "FileSystem& FileSystem::operator=(const FileSystem &aFileSystem)" << endl;
     if (this != &aFileSystem) {
         delete rootDirectory;
@@ -42,14 +42,14 @@ FileSystem &FileSystem::operator=(const FileSystem &aFileSystem) {      //operat
 
 
 FileSystem::FileSystem(const FileSystem &aFileSystem) {                 //copy constructor
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "FileSystem::FileSystem(const FileSystem &aFileSystem)" << endl;
     rootDirectory = new Directory(*&aFileSystem.getRootDirectory());
     workingDirectory = rootDirectory;
 }
 
 FileSystem &FileSystem::operator=(FileSystem &&other) {                 //move assignment operator
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "FileSystem& FileSystem::operator=(FileSystem &&other)" << endl;
     if (this != &other) {
         delete rootDirectory;
@@ -63,7 +63,7 @@ FileSystem &FileSystem::operator=(FileSystem &&other) {                 //move a
 
 
 FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory) {       //move constructor
-    if (verbose == 1 | verbose == 3)
+    if (verbose == 1 || verbose == 3)
         cout << "FileSystem::FileSystem(FileSystem &&other)" << endl;
     workingDirectory = rootDirectory;
     other.rootDirectory = nullptr;
