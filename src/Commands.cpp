@@ -433,8 +433,6 @@ void MvCommand::execute(FileSystem &fs) {
         bool isInPath = false;
         Directory *curr = &fs.getWorkingDirectory();
         while (!isFileAFile && !isInPath && curr != nullptr) {
-            cout << (curr == papaSrc->getParent()) << endl;
-            cout << papaSrc->getParent()->getName() << endl;
             if (curr == (isFileParent ? papaSrc->getParent() : papaSrc->findDirByName(fileSrcName))) {
                 isInPath = true;
             }
