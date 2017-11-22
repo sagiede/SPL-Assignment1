@@ -24,7 +24,7 @@ void Environment::start() {
             args = userInput.substr(spacePos + 1);
         }
 
-        if (verbose == 2 || verbose == 3) {
+        if ((verbose == 2 || verbose == 3) && commandStr != "exit") {
             cout << userInput << endl;
         }
 
@@ -77,7 +77,7 @@ void Environment::start() {
             command->execute(fs);
             addToHistory(command);
         } else if (commandStr != "exit") {
-            ErrorCommand *command = new ErrorCommand(commandStr);
+            ErrorCommand *command = new ErrorCommand(userInput);
             command->execute(fs);
             addToHistory(command);
         }

@@ -63,7 +63,7 @@ File::File(const File &aFile)  : BaseFile(aFile.getName()) {        //copy opera
 File& File::operator=(File &&other) {                               //move assignment operator
     if (verbose == 1 | verbose ==3)
         cout << "File& File::operator=(File &&other)" << endl;
-   setName(other.getName());
+    setName(other.getName());
     size = other.size;
 }
 
@@ -87,7 +87,7 @@ Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(pa
 
 Directory::~Directory() {
     if (verbose == 1 | verbose ==3)
-    cout << "Directory::~Directory()" << endl;
+        cout << "Directory::~Directory()" << endl;
     clear();
 }
 
@@ -104,7 +104,7 @@ void Directory::clear() {
 Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()),
                                                     parent(aDirectory.parent) {   //copy constructor
     if (verbose == 1 | verbose ==3)
-    cout << "Directory::Directory(const Directory &aDirectory)" << endl;
+        cout << "Directory::Directory(const Directory &aDirectory)" << endl;
     for (BaseFile *child : aDirectory.children) {
         children.push_back(child->clone());
     }
@@ -121,7 +121,7 @@ BaseFile *Directory::clone() {                                  //private func
 Directory &Directory::operator=(const Directory &aDirectory)    //assignment = operator
 {
     if (verbose == 1 | verbose ==3)
-    cout << "Directory &Directory::operator=(const Directory &aDirectory)" << endl;
+        cout << "Directory &Directory::operator=(const Directory &aDirectory)" << endl;
     if (this != &aDirectory) {
         clear();
         setName(aDirectory.getName());
@@ -135,7 +135,7 @@ Directory &Directory::operator=(const Directory &aDirectory)    //assignment = o
 
 Directory& Directory::operator=(Directory &&other) {        //move assignment = operator
     if (verbose == 1 | verbose ==3)
-    cout << "Directory& Directory::operator=(Directory &&other)" << endl;
+        cout << "Directory& Directory::operator=(Directory &&other)" << endl;
     if (this != &other) {
         clear();
         setName(other.getName());
@@ -150,24 +150,26 @@ Directory& Directory::operator=(Directory &&other) {        //move assignment = 
     }
 }
 
-  Directory::Directory(Directory &&other)  : BaseFile(other.getName()),
-                                                    parent(other.parent) {   //move copy constructor
-      if (verbose == 1 | verbose ==3)
+Directory::Directory(Directory &&other)  : BaseFile(other.getName()),
+                                           parent(other.parent) {   //move copy constructor
+    if (verbose == 1 | verbose ==3)
         cout << "Directory::Directory(Directory &&other)" << endl;
     for (BaseFile *child : other.children) {
         children.push_back(child);
         child = nullptr;
     }
-      other.children.clear();
-      other.parent = nullptr;
+    other.children.clear();
+    other.parent = nullptr;
 }
 
 
 string Directory::getAbsolutePath() {
-    string fullPath = getName() + "/";
+    string fullPath = "/" + getName();
     Directory *curr = getParent();
     while (curr != nullptr) {
-        fullPath = curr->getName() + "/" + fullPath;
+        if (curr->getParent()) {
+            fullPath = "/" + curr->getName() + fullPath;
+        }
         curr = curr->getParent();
     }
     return fullPath;
