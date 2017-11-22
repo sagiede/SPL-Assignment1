@@ -246,7 +246,7 @@ VerboseCommand::VerboseCommand(string args) : BaseCommand(args) {};
 void VerboseCommand::execute(FileSystem &fs) {
     unsigned int input = stoul(getArgs());
 
-    if (input >= 0 && input <= 3) {
+    if (input <= 3) {
         verbose = input;
     } else {
         cout << "Wrong verbose input”" << endl;
@@ -447,11 +447,10 @@ void MvCommand::execute(FileSystem &fs) {
                 delete dirSrc;
             }
         } else if (des->findFileByName(isFileAFile ? fileSrc->getName() : dirSrc->getName())) {
-//        cout << "The directory/file already exists" << endl;
             if (isFileAFile) {
                 delete fileSrc;
             } else {
-//                delete dirSrc;
+                delete dirSrc;
             }
         } else {
 
@@ -467,43 +466,55 @@ void MvCommand::execute(FileSystem &fs) {
     }
 }
 
-PwdCommand* PwdCommand::clone() {
+PwdCommand *PwdCommand::clone() {
     return new PwdCommand(getArgs());
 }
-CdCommand* CdCommand::clone() {
+
+CdCommand *CdCommand::clone() {
     return new CdCommand(getArgs());
 }
-LsCommand* LsCommand::clone() {
+
+LsCommand *LsCommand::clone() {
     return new LsCommand(getArgs());
 }
-MkdirCommand* MkdirCommand::clone() {
+
+MkdirCommand *MkdirCommand::clone() {
     return new MkdirCommand(getArgs());
 }
-MkfileCommand* MkfileCommand::clone() {
+
+MkfileCommand *MkfileCommand::clone() {
     return new MkfileCommand(getArgs());
 }
-CpCommand* CpCommand::clone() {
+
+CpCommand *CpCommand::clone() {
     return new CpCommand(getArgs());
 }
-MvCommand* MvCommand::clone() {
-  return new MvCommand(getArgs());
+
+MvCommand *MvCommand::clone() {
+    return new MvCommand(getArgs());
 }
-RenameCommand* RenameCommand::clone() {
+
+RenameCommand *RenameCommand::clone() {
     return new RenameCommand(getArgs());
 }
-RmCommand* RmCommand::clone() {
+
+RmCommand *RmCommand::clone() {
     return new RmCommand(getArgs());
 }
-VerboseCommand* VerboseCommand::clone() {
+
+VerboseCommand *VerboseCommand::clone() {
     return new VerboseCommand(getArgs());
 }
-ErrorCommand* ErrorCommand::clone() {
+
+ErrorCommand *ErrorCommand::clone() {
     return new ErrorCommand(getArgs());
 }
-HistoryCommand* HistoryCommand::clone() {
+
+HistoryCommand *HistoryCommand::clone() {
 
     return new HistoryCommand(getArgs(), history);
 }
-ExecCommand* ExecCommand::clone() {
-    return new ExecCommand(getArgs(),history);
+
+ExecCommand *ExecCommand::clone() {
+    return new ExecCommand(getArgs(), history);
 }

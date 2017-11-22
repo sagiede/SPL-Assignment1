@@ -20,7 +20,8 @@ public:
     virtual string toString() = 0;
 
     Directory *getToPath(FileSystem &fs, string path, bool createIfNotFound);
-    virtual BaseCommand* clone() = 0;
+
+    virtual BaseCommand *clone() = 0;
 };
 
 class PwdCommand : public BaseCommand {
@@ -29,9 +30,10 @@ public:
     PwdCommand(string args);
 
     void execute(FileSystem &fs); // Every derived class should implement this function according to the document (pdf)
-    virtual string toString();
 
-    virtual PwdCommand* clone();
+    string toString();
+
+    PwdCommand *clone();
 };
 
 class CdCommand : public BaseCommand {
@@ -43,7 +45,7 @@ public:
 
     string toString();
 
-    virtual CdCommand* clone();
+    CdCommand *clone();
 };
 
 class LsCommand : public BaseCommand {
@@ -55,7 +57,7 @@ public:
 
     string toString();
 
-    virtual LsCommand* clone();
+    LsCommand *clone();
 };
 
 class MkdirCommand : public BaseCommand {
@@ -67,7 +69,7 @@ public:
 
     string toString();
 
-    virtual MkdirCommand* clone();
+    MkdirCommand *clone();
 };
 
 class MkfileCommand : public BaseCommand {
@@ -79,7 +81,7 @@ public:
 
     string toString();
 
-    virtual MkfileCommand* clone();
+    MkfileCommand *clone();
 };
 
 class CpCommand : public BaseCommand {
@@ -91,7 +93,7 @@ public:
 
     string toString();
 
-    virtual CpCommand* clone();
+    CpCommand *clone();
 };
 
 class MvCommand : public BaseCommand {
@@ -103,7 +105,7 @@ public:
 
     string toString();
 
-    virtual MvCommand* clone();
+    MvCommand *clone();
 };
 
 class RenameCommand : public BaseCommand {
@@ -115,7 +117,7 @@ public:
 
     string toString();
 
-    virtual RenameCommand* clone();
+    RenameCommand *clone();
 };
 
 class RmCommand : public BaseCommand {
@@ -127,7 +129,7 @@ public:
 
     string toString();
 
-    virtual RmCommand* clone();
+    RmCommand *clone();
 };
 
 class HistoryCommand : public BaseCommand {
@@ -140,7 +142,7 @@ public:
 
     string toString();
 
-    virtual HistoryCommand* clone();
+    HistoryCommand *clone();
 };
 
 
@@ -149,11 +151,11 @@ private:
 public:
     VerboseCommand(string args);
 
-    virtual VerboseCommand* clone();
-
     void execute(FileSystem &fs);
 
     string toString();
+
+    VerboseCommand *clone();
 };
 
 class ErrorCommand : public BaseCommand {
@@ -165,7 +167,7 @@ public:
 
     string toString();
 
-    virtual ErrorCommand* clone();
+    ErrorCommand *clone();
 };
 
 class ExecCommand : public BaseCommand {
@@ -178,7 +180,7 @@ public:
 
     string toString();
 
-    virtual ExecCommand* clone();
+    ExecCommand *clone();
 };
 
 

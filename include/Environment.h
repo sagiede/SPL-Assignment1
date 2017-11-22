@@ -12,16 +12,17 @@ using namespace std;
 
 class Environment {
 private:
-   vector<BaseCommand *> commandsHistory;
+    vector<BaseCommand *> commandsHistory;
     FileSystem fs;
 
 public:
     Environment();
+
     ~Environment(); // Destructor
-    Environment(const Environment & aEnvironment);  //copy constructor
-    Environment& operator=(const Environment &aEnvironment);    //assignment = operator
-    Environment(Environment&& other);     //move constructor
-    Environment& operator=(Environment &&other);   //move assignment = operator
+    Environment(const Environment &aEnvironment);  //copy constructor
+    Environment &operator=(const Environment &aEnvironment);    //assignment = operator
+    Environment(Environment &&other);     //move constructor
+    Environment &operator=(Environment &&other);   //move assignment = operator
 
     void start();
 

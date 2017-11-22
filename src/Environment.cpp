@@ -97,16 +97,17 @@ const vector<BaseCommand *> &Environment::getHistory() const {
 }
 
 Environment::~Environment() {                               //DESTRUCTOR
-    if (verbose == 1 | verbose ==3)
-    cout << "Environment::~Environment()" << endl;
+    if (verbose == 1 | verbose == 3)
+        cout << "Environment::~Environment()" << endl;
     for (BaseCommand *command : commandsHistory) {
         delete command;
     }
     commandsHistory.clear();
 }
-Environment& Environment::operator=(const Environment &aEnvironment) {  //opertaor =
-    if (verbose == 1 | verbose ==3)
-    cout << "Environment& Environment::operator=(const Environment &aEnvironment)" << endl;
+
+Environment &Environment::operator=(const Environment &aEnvironment) {  //opertaor =
+    if (verbose == 1 | verbose == 3)
+        cout << "Environment& Environment::operator=(const Environment &aEnvironment)" << endl;
     if (this != &aEnvironment) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
@@ -116,21 +117,21 @@ Environment& Environment::operator=(const Environment &aEnvironment) {  //operta
         for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
             commandsHistory.push_back(cmnd->clone());
         }
-        return *this;
     }
+    return *this;
 }
 
-Environment::Environment(const Environment &aEnvironment): fs(aEnvironment.fs) {    //copy constructor
-    if (verbose == 1 | verbose ==3)
-    cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
+Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs) {    //copy constructor
+    if (verbose == 1 | verbose == 3)
+        cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
         commandsHistory.push_back(cmnd->clone());
     }
 }
 
 Environment::Environment(Environment &&other) : fs(other.fs) {              //move constructor
-    if (verbose == 1 | verbose ==3)
-    cout << "Environment::Environment(Environment &&other)" << endl;
+    if (verbose == 1 | verbose == 3)
+        cout << "Environment::Environment(Environment &&other)" << endl;
     for (BaseCommand *cmnd : other.commandsHistory) {
         commandsHistory.push_back(cmnd);
         cmnd = nullptr;
@@ -138,9 +139,10 @@ Environment::Environment(Environment &&other) : fs(other.fs) {              //mo
     other.commandsHistory.clear();
 
 }
-Environment& Environment::operator=(Environment &&other) {              //move assignment operator
-    if (verbose == 1 | verbose ==3)
-    cout << "Environment& Environment::operator=(Environment &&other)" << endl;
+
+Environment &Environment::operator=(Environment &&other) {              //move assignment operator
+    if (verbose == 1 | verbose == 3)
+        cout << "Environment& Environment::operator=(Environment &&other)" << endl;
     if (this != &other) {
         for (BaseCommand *command : commandsHistory) {
             delete command;
@@ -152,7 +154,7 @@ Environment& Environment::operator=(Environment &&other) {              //move a
             cmnd = nullptr;
         }
         other.commandsHistory.clear();
-        return *this;
     }
+    return *this;
 }
 
