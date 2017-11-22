@@ -5,11 +5,7 @@
 
 using namespace std;
 
-FileSystem::FileSystem() {
-    Directory *root = new Directory("", nullptr);
-    rootDirectory = root;
-    workingDirectory = root;
-}
+FileSystem::FileSystem() : rootDirectory(new Directory("", nullptr)), workingDirectory(rootDirectory) {}
 
 FileSystem::~FileSystem() {                 //destructor
     if (verbose == 1 || verbose == 3)
@@ -41,11 +37,11 @@ FileSystem &FileSystem::operator=(const FileSystem &aFileSystem) {      //operat
 }
 
 
-FileSystem::FileSystem(const FileSystem &aFileSystem) {                 //copy constructor
+FileSystem::FileSystem(const FileSystem &aFileSystem) :
+        rootDirectory(new Directory(*&aFileSystem.getRootDirectory())),
+        workingDirectory(rootDirectory) {                 //copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "FileSystem::FileSystem(const FileSystem &aFileSystem)" << endl;
-    rootDirectory = new Directory(*&aFileSystem.getRootDirectory());
-    workingDirectory = rootDirectory;
 }
 
 FileSystem &FileSystem::operator=(FileSystem &&other) {                 //move assignment operator
@@ -62,10 +58,10 @@ FileSystem &FileSystem::operator=(FileSystem &&other) {                 //move a
 }
 
 
-FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory) {       //move constructor
+FileSystem::FileSystem(FileSystem &&other) : rootDirectory(other.rootDirectory),
+                                             workingDirectory(rootDirectory) {       //move constructor
     if (verbose == 1 || verbose == 3)
         cout << "FileSystem::FileSystem(FileSystem &&other)" << endl;
-    workingDirectory = rootDirectory;
     other.rootDirectory = nullptr;
     other.workingDirectory = nullptr;
 }

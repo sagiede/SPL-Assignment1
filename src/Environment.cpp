@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Environment::Environment() {};
+Environment::Environment() : commandsHistory(),fs() {};
 
 void Environment::start() {
     string userInput;
