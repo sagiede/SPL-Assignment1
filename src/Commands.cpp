@@ -280,7 +280,7 @@ HistoryCommand::HistoryCommand(string args, const vector<BaseCommand *> &refHist
         : BaseCommand(args), history(refHistory) {}
 
 void HistoryCommand::execute(FileSystem &fs) {
-    for (int i = 0; i < history.size(); i++) {
+    for (size_t i = 0; i < history.size(); i++) {
         cout << i << "\t" << history.at(i)->toString() << endl;
     }
 }
@@ -292,8 +292,8 @@ ExecCommand::ExecCommand(string args, const vector<BaseCommand *> &refHistory)
         : BaseCommand(args), history(refHistory) {}
 
 void ExecCommand::execute(FileSystem &fs) {
-    int index = std::stoi(getArgs());
-    if (index >= history.size())
+    int index = stoi(getArgs());
+    if ((unsigned) index >= history.size())
         cout << "Command not found" << endl;
     else
         history.at(index)->execute(fs);

@@ -130,7 +130,7 @@ Environment::Environment(const Environment &aEnvironment)
     }
 }
 
-Environment::Environment(Environment &&other) : fs(other.fs) {              //move constructor
+Environment::Environment(Environment &&other) : commandsHistory(), fs(other.fs) {              //move constructor
     if (verbose == 1 || verbose == 3)
         cout << "Environment::Environment(Environment &&other)" << endl;
     for (BaseCommand *cmnd : other.commandsHistory) {
