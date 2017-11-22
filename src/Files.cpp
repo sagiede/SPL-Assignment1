@@ -76,7 +76,7 @@ File::File(File &&other) : BaseFile(other.getName()), size(other.size) {        
 
 
 //  ~~~~~~~~ DIRECTORY  ~~~~~~~~
-Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent), children() {}
+Directory::Directory(string name, Directory *parent) : BaseFile(name), children(), parent(parent) {}
 
 Directory::~Directory() {
     if (verbose == 1 || verbose == 3)
@@ -95,8 +95,8 @@ void Directory::clear() {
 
 
 Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()),
-                                                    parent(aDirectory.parent),
-                                                    children() {   //copy constructor
+                                                    children(),
+                                                    parent(aDirectory.parent) {   //copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Directory::Directory(const Directory &aDirectory)" << endl;
     for (BaseFile *child : aDirectory.children) {
@@ -145,8 +145,8 @@ Directory &Directory::operator=(Directory &&other) {        //move assignment = 
 }
 
 Directory::Directory(Directory &&other) : BaseFile(other.getName()),
-                                          parent(other.parent),
-                                          children() {   //move copy constructor
+                                          children(),
+                                          parent(other.parent) {   //move copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Directory::Directory(Directory &&other)" << endl;
     for (BaseFile *child : other.children) {

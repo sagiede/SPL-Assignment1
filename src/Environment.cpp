@@ -121,8 +121,8 @@ Environment &Environment::operator=(const Environment &aEnvironment) {  //operta
     return *this;
 }
 
-Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs),
-                                                            commandsHistory() {    //copy constructor
+Environment::Environment(const Environment &aEnvironment)
+        : commandsHistory(), fs(aEnvironment.fs) {    //copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
