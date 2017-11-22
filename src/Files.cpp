@@ -13,7 +13,7 @@ using namespace std;
 //  ~~~~~~~~ BASEFILE ~~~~~~~~~
 BaseFile::BaseFile(string name) : name(name) {}
 
-BaseFile::BaseFile(const BaseFile &aBaseFile) {}            //copy operator
+BaseFile::BaseFile(const BaseFile &aBaseFile) : name(aBaseFile.getName()) {}            //copy operator
 
 BaseFile::~BaseFile() {}                                    //destructor
 
@@ -48,10 +48,9 @@ BaseFile *File::clone() {
     return file;
 }
 
-File::File(const File &aFile) : BaseFile(aFile.getName()) {        //copy operator
+File::File(const File &aFile) : BaseFile(aFile.getName()), size(aFile.size) {        //copy operator
     if (verbose == 1 || verbose == 3)
         cout << "File::File(const File &aFile)" << endl;
-    size = aFile.size;
 }
 
 File &File::operator=(File &&other) {                               //move assignment operator
@@ -70,15 +69,14 @@ File &File::operator=(const File &aFile) {                          // operator 
     return *this;
 }
 
-File::File(File &&other) : BaseFile(other.getName()) {               //move constructor
+File::File(File &&other) : BaseFile(other.getName()), size(other.size) {               //move constructor
     if (verbose == 1 || verbose == 3)
         cout << "File::File(File &&other) : BaseFile(other.getName())" << endl;
-    size = other.size;
 }
 
 
 //  ~~~~~~~~ DIRECTORY  ~~~~~~~~
-Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent) {}
+Directory::Directory(string name, Directory *parent) : BaseFile(name), parent(parent), children() {}
 
 Directory::~Directory() {
     if (verbose == 1 || verbose == 3)
@@ -97,7 +95,8 @@ void Directory::clear() {
 
 
 Directory::Directory(const Directory &aDirectory) : BaseFile(aDirectory.getName()),
-                                                    parent(aDirectory.parent) {   //copy constructor
+                                                    parent(aDirectory.parent),
+                                                    children() {   //copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Directory::Directory(const Directory &aDirectory)" << endl;
     for (BaseFile *child : aDirectory.children) {
@@ -146,7 +145,8 @@ Directory &Directory::operator=(Directory &&other) {        //move assignment = 
 }
 
 Directory::Directory(Directory &&other) : BaseFile(other.getName()),
-                                          parent(other.parent) {   //move copy constructor
+                                          parent(other.parent),
+                                          children() {   //move copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Directory::Directory(Directory &&other)" << endl;
     for (BaseFile *child : other.children) {

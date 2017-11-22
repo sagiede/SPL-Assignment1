@@ -4,7 +4,7 @@
 
 using namespace std;
 
-Environment::Environment() : commandsHistory(),fs() {};
+Environment::Environment() : commandsHistory(), fs() {};
 
 void Environment::start() {
     string userInput;
@@ -121,7 +121,8 @@ Environment &Environment::operator=(const Environment &aEnvironment) {  //operta
     return *this;
 }
 
-Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs) {    //copy constructor
+Environment::Environment(const Environment &aEnvironment) : fs(aEnvironment.fs),
+                                                            commandsHistory() {    //copy constructor
     if (verbose == 1 || verbose == 3)
         cout << "Environment::Environment(const Environment &aEnvironment)" << endl;
     for (BaseCommand *cmnd : aEnvironment.commandsHistory) {
