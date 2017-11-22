@@ -124,8 +124,8 @@ Directory &Directory::operator=(const Directory &aDirectory)    //assignment = o
         for (BaseFile *child : aDirectory.children) {
             children.push_back(child->clone());
         }
-        return *this;
     }
+    return *this;
 }
 
 Directory &Directory::operator=(Directory &&other) {        //move assignment = operator

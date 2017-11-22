@@ -8,6 +8,8 @@ using namespace std;
 
 BaseCommand::BaseCommand(string args) : args(args) {};
 
+BaseCommand::~BaseCommand() {};
+
 string BaseCommand::toString() { return args.empty() ? "" : (" " + args); };
 
 string BaseCommand::getArgs() {

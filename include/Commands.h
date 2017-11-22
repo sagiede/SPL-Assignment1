@@ -15,6 +15,8 @@ public:
 
     string getArgs();
 
+    virtual ~BaseCommand() = 0;
+
     virtual void execute(FileSystem &fs) = 0;
 
     virtual string toString() = 0;
