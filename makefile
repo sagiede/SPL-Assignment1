@@ -21,3 +21,10 @@ bin/FileSystem.o: src/FileSystem.cpp
 
 clean:
 	rm -f bin/*
+
+test1: clean fs
+	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -
+test2: clean fs
+	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -
+test3: clean fs
+	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -

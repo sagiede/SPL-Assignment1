@@ -200,8 +200,8 @@ void RenameCommand::execute(FileSystem &fs) {
     if (curr == nullptr || curr->findFileByName(fileName) == nullptr) {
         cout << "No such file or directory" << endl;
     } else if (curr->findFileByName(fileName) == &fs.getWorkingDirectory()) {
-        cout << "Can’t rename the working directory" << endl;
-    } else {
+        cout << "Can't rename the working directory" << endl;
+    } else if(curr->findFileByName(newName) == nullptr) {
         curr->findFileByName(fileName)->setName(newName);
     }
 }
@@ -405,7 +405,7 @@ void MvCommand::execute(FileSystem &fs) {
 
     if (papaSrc == nullptr || (isFileParent ? papaSrc->getParent() : papaSrc->findFileByName(fileSrcName)) == nullptr) {
         if (sourcePath == "/") {
-            cout << "Can’t move directory" << endl;
+            cout << "Can't move directory" << endl;
         } else {
             cout << "No such file or directory" << endl;
         }
@@ -440,7 +440,7 @@ void MvCommand::execute(FileSystem &fs) {
         }
 
         if (isInPath) {
-            cout << "Can’t move directory" << endl;
+            cout << "Can't move directory" << endl;
             if (isFileAFile) {
                 delete fileSrc;
             } else {
