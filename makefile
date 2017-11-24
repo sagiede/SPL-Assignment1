@@ -23,8 +23,8 @@ clean:
 	rm -f bin/*
 
 test1: clean fs
-	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -
+	./bin/fs < output-tests/input1.txt | diff output-tests/output1.txt -
 test2: clean fs
-	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -
+	./bin/fs < output-tests/input2.txt | diff output-tests/output2.txt -
 test3: clean fs
 	./bin/fs < output-tests/input3.txt | diff output-tests/output3.txt -

@@ -68,7 +68,7 @@ DIR	d1	3030
 The directory already exists
 />mkdir d2/d21/d21f1
 The directory already exists
-/>mkdir d2/d21/d21f2
+/>mkdir d2/d21/d21f1/d211
 The directory already exists
 />ls d2/d21
 FILE	d21f1	1

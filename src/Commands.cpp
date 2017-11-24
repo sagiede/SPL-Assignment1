@@ -10,7 +10,7 @@ BaseCommand::BaseCommand(string args) : args(args) {};
 
 BaseCommand::~BaseCommand() {};
 
-string BaseCommand::toString() { return args.empty() ? "" : (" " + args); };
+string BaseCommand::toString() { return " " + args; };
 
 string BaseCommand::getArgs() {
     return args;
@@ -44,7 +44,7 @@ Directory *BaseCommand::getToPath(FileSystem &fs, string path, bool createIfNotF
             childDir = curr;
         } else {
             childDir = curr->findDirByName(dirName);
-            if (childDir == nullptr && createIfNotFound) {
+            if (childDir == nullptr && createIfNotFound && curr->findFileByName(dirName) == nullptr) {
                 childDir = new Directory(dirName, curr);
                 curr->addFile(childDir);
             }
@@ -102,11 +102,11 @@ void MkdirCommand::execute(FileSystem &fs) {
         dirName = getArgs().substr(lastSlashPos + 1);
         curr = getToPath(fs, path, true);
     }
-    if (curr->findFileByName(dirName) == nullptr) {
+    if (curr == nullptr || curr->findFileByName(dirName) != nullptr) {
+        cout << "The directory already exists" << endl;
+    } else {
         Directory *newDir = new Directory(dirName, curr);
         curr->addFile(newDir);
-    } else {
-        cout << "The directory already exists" << endl;
     }
 }
 
@@ -201,7 +201,7 @@ void RenameCommand::execute(FileSystem &fs) {
         cout << "No such file or directory" << endl;
     } else if (curr->findFileByName(fileName) == &fs.getWorkingDirectory()) {
         cout << "Can't rename the working directory" << endl;
-    } else if(curr->findFileByName(newName) == nullptr) {
+    } else if (curr->findFileByName(newName) == nullptr) {
         curr->findFileByName(fileName)->setName(newName);
     }
 }

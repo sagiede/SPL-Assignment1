@@ -2,11 +2,11 @@
 0	verbose 2
 />history
 0	verbose 2
-1	history
+1	history 
 />history
 0	verbose 2
-1	history
-2	history
+1	history 
+2	history 
 />******************************* 0 *******************************
 *******************************: Unknown command
 />mkfile rf1 100
@@ -280,9 +280,9 @@ Can't remove directory
 *******************************: Unknown command
 /d4>history
 0	verbose 2
-1	history
-2	history
-3	history
+1	history 
+2	history 
+3	history 
 4	******************************* 0 *******************************
 5	mkfile rf1 100
 6	mkfile rf2 100
@@ -290,38 +290,38 @@ Can't remove directory
 8	mkdir d1
 9	mkdir d2
 10	mkdir d3
-11	ls
+11	ls 
 12	cd d1
 13	mkfile d1f1 1000
 14	mkfile d1f2 2000
 15	mkfile d1f3 30
 16	mkdir d11
 17	mkdir d12
-18	ls
+18	ls 
 19	cd ../d2
 20	mkdir d21
 21	mkdir d22
 22	mkdir d23
-23	ls
+23	ls 
 24	cd d21
 25	mkfile d21f1 1
 26	mkfile d21f2 2
-27	ls
+27	ls 
 28	******************************* cp file *******************************
 29	cp d21f1 ..
 30	cp d21f1 ..
-31	ls
+31	ls 
 32	cd ..
-33	ls
+33	ls 
 34	cp ../rf1 d21
-35	ls
+35	ls 
 36	cd d21
-37	ls
+37	ls 
 38	cd ../..
-39	ls
+39	ls 
 40	******************************* cp directory *******************************
 41	cp d2/d21 d2/d22
-42	ls
+42	ls 
 43	ls d2
 44	ls d2/d22
 45	******************************* mv file *******************************
@@ -332,30 +332,30 @@ Can't remove directory
 50	mv f999 d23
 51	ls d23
 52	mv ../d2/d21f1 ../../../..
-53	ls
+53	ls 
 54	ls /
 55	******************************* mv directory *******************************
 56	cd /
 57	mv d2 d1
-58	ls
+58	ls 
 59	ls d1
 60	ls d2
 61	mv d1/d2 /
-62	ls
+62	ls 
 63	mv d999 d1
-64	ls
+64	ls 
 65	ls d1
 66	mv d1 d999
-67	ls
+67	ls 
 68	ls d1
 69	mkdir d3/d31
 70	cd d3/d31
-71	ls
+71	ls 
 72	mv .. /
-73	ls
+73	ls 
 74	ls /
 75	mv /d3 /d1
-76	ls
+76	ls 
 77	ls /d1
 78	ls /
 79	******************************* rename file *******************************
@@ -363,28 +363,28 @@ Can't remove directory
 81	rename rf1 rf3
 82	rename rf3 rf2
 83	rename f999 rf4
-84	ls
+84	ls 
 85	******************************* rename directory *******************************
 86	rename d1 d4
-87	ls
+87	ls 
 88	rename /d4 d2
-89	ls
+89	ls 
 90	rename d9999 d8888
-91	ls
+91	ls 
 92	cd d3/d31
 93	rename ../d31 d3333
 94	******************************* rm file *******************************
 95	cd /
 96	rm rf2
-97	ls
+97	ls 
 98	rm f9999
-99	ls
+99	ls 
 100	******************************* rm directory *******************************
 101	rm d2
-102	ls
+102	ls 
 103	rm d3
 104	rm rf3
-105	ls
+105	ls 
 106	cd d4
 107	rm /d4
 108	******************************* history and exec *******************************

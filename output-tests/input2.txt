@@ -40,7 +40,7 @@ cd /
 ls -s
 mkdir /d1/d11
 mkdir d2/d21/d21f1
-mkdir d2/d21/d21f2
+mkdir d2/d21/d21f1/d211
 ls d2/d21
 mkdir d4/d41
 ls d4
